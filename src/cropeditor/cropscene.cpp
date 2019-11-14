@@ -299,6 +299,12 @@ void CropScene::keyReleaseEvent(QKeyEvent *event) {
     if (event->modifiers() & Qt::ControlModifier) event->accept();
 }
 
+void CropScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e)
+{
+    e->accept();
+    done(true);
+}
+
 
 void CropScene::updatePoly() {
     QPolygonF poly;

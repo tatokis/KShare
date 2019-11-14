@@ -46,6 +46,7 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *e) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *e) override;
     void keyReleaseEvent(QKeyEvent *e) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e) override;
     QString generateHint() override;
 
 private slots:
