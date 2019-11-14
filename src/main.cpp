@@ -24,31 +24,6 @@ bool verbose = false;
 // still alive
 bool stillAlive = true;
 
-#define LOGACT(lvl) std::cout << lvl << stdMsg << "\n" << std::flush;
-void handler(QtMsgType type, const QMessageLogContext &, const QString &msg) {
-    if (!verbose && msg.startsWith("QPixmap::fromWinHBITMAP")) return;
-    std::string stdMsg = msg.toStdString();
-    switch (type) {
-    case QtDebugMsg:
-        if (verbose) {
-            LOGACT("DEBUG: ")
-        }
-        break;
-    case QtInfoMsg:
-        LOGACT("INFO: ")
-        break;
-    case QtWarningMsg:
-        LOGACT("WARN: ")
-        break;
-    case QtCriticalMsg:
-        LOGACT("CRIT: ")
-        break;
-    case QtFatalMsg:
-        LOGACT("FATAL: ")
-        break;
-    }
-}
-
 void loadTranslation(QString locale) {
     QFile resource(":/translations/" + locale + ".qm");
     if (!resource.exists()) return;
@@ -63,8 +38,9 @@ void loadTranslation(QString locale) {
 }
 
 int main(int argc, char *argv[]) {
+#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(58, 9, 100)
     av_register_all();
-    qInstallMessageHandler(handler);
+#endif
     QApplication a(argc, argv);
     a.setQuitOnLastWindowClosed(false);
     a.setApplicationName("KShare");

@@ -73,7 +73,8 @@ SOURCES += main.cpp\
     screenoverlay/screenoverlayview.cpp \
     screenoverlay/screenoverlay.cpp \
     screenoverlay/screenoverlaysettings.cpp \
-    logger.cpp
+    logger.cpp \
+    uploaders/default/nulluploader.cpp
 
 HEADERS  += mainwindow.hpp \
     cropeditor/cropeditor.hpp \
@@ -125,7 +126,8 @@ HEADERS  += mainwindow.hpp \
     screenoverlay/screenoverlayview.hpp \
     screenoverlay/screenoverlay.hpp \
     screenoverlay/screenoverlaysettings.hpp \
-    logger.hpp
+    logger.hpp \
+    uploaders/default/nulluploader.hpp
 
 nopkg {
 #    win32 {
