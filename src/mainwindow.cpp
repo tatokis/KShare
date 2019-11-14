@@ -55,27 +55,32 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     tray->setToolTip("KShare");
     tray->setVisible(true);
     menu = new QMenu(this);
-    QAction *quit = ACTION(tr("Quit"), menu);
-    QAction *shtoggle = ACTION(tr("Show/Hide"), menu);
-    QAction *fullscreen = ACTION(tr("Take fullscreen shot"), menu);
-    QAction *area = ACTION(tr("Take area shot"), menu);
+    QAction *shtoggle = ACTION(tr("Show Window"), menu);
+    QAction *fullscreen = ACTION(tr("Desktop"), menu);
+    QAction *area = ACTION(tr("Selection"), menu);
 
 #ifdef PLATFORM_CAPABILITY_ACTIVEWINDOW
-    QAction *active = ACTION(tr("Screenshot active window"), menu);
+    QAction *active = ACTION(tr("Active window"), menu);
     connect(active, &QAction::triggered, this, [] { screenshotter::activeDelayed(); });
 #endif
-    QAction *picker = ACTION(tr("Show color picker"), menu);
+    QAction *picker = ACTION(tr("Color picker"), menu);
     QAction *rec = ACTION(tr("Record screen"), menu);
     QAction *recoff = ACTION(tr("Stop recording"), menu);
     QAction *recabort = ACTION(tr("Abort recording"), menu);
-    menu->addActions({ quit, shtoggle, picker });
+    QAction *quit = ACTION(tr("Quit"), menu);
+
+    menu->addAction(shtoggle);
     menu->addSeparator();
-    menu->addActions({ fullscreen, area });
+    menu->addAction(picker);
+    menu->addSeparator();
+    menu->addActions({ area, fullscreen });
 #ifdef PLATFORM_CAPABILITY_ACTIVEWINDOW
     menu->addAction(active);
 #endif
     menu->addSeparator();
     menu->addActions({ rec, recoff, recabort });
+    menu->addSeparator();
+    menu->addAction(quit);
     connect(quit, &QAction::triggered, this, &MainWindow::quit);
     connect(shtoggle, &QAction::triggered, this, &MainWindow::toggleVisible);
     connect(picker, &QAction::triggered, [] { ColorPickerScene::showPicker(); });
