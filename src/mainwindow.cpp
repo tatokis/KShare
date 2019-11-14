@@ -52,7 +52,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->setupUi(this);
     setWindowIcon(QIcon(":/icons/icon.png"));
     tray = new QSystemTrayIcon(windowIcon(), this);
-    tray->setToolTip("KShare");
+    tray->setToolTip(QApplication::applicationName());
     tray->setVisible(true);
     menu = new QMenu(this);
     QAction *shtoggle = ACTION(tr("Show Window"), menu);
@@ -107,7 +107,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     auto errors = UploaderSingleton::inst().errors();
     for (auto err : errors) ui->logBox->addItem(QString("ERROR: ") + err.what());
-    setWindowTitle("KShare v" + QApplication::applicationVersion());
+    setWindowTitle(QApplication::applicationName());
     val = true;
 }
 
