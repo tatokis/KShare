@@ -118,7 +118,7 @@ QPixmap utils::renderText(QString toRender, int padding, QColor background, QCol
 QString utils::randomString(int length) {
     QString str;
     str.resize(length);
-    for (int s = 0; s < length; s++) str[s] = QChar('A' + char(qrand() % ('Z' - 'A')));
+    for (int s = 0; s < length; s++) str[s] = QChar('A' + char(rand() % ('Z' - 'A')));
     return str;
 }
 

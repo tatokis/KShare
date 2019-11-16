@@ -41,6 +41,7 @@ int main(int argc, char *argv[]) {
 #if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(58, 9, 100)
     av_register_all();
 #endif
+    srand((unsigned int)time(nullptr));
     QApplication a(argc, argv);
     a.setQuitOnLastWindowClosed(false);
     a.setApplicationName("KShare");
