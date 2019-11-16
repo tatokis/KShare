@@ -22,24 +22,12 @@ extern "C" {
 // still alive
 bool stillAlive = true;
 
-void loadTranslation(QString locale) {
-    QFile resource(":/translations/" + locale + ".qm");
-    if (!resource.exists()) return;
-    resource.open(QIODevice::ReadOnly);
-
-    QTranslator *translator = new QTranslator;
-    QByteArray file = resource.readAll();
-    QByteArray *permFile = new QByteArray;
-    permFile->swap(file);
-    translator->load((const unsigned char *)permFile->constData(), permFile->size());
-    QApplication::installTranslator(translator);
-}
-
 int main(int argc, char *argv[]) {
 #if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(58, 9, 100)
     av_register_all();
 #endif
     srand((unsigned int)time(nullptr));
+
     QApplication a(argc, argv);
     a.setQuitOnLastWindowClosed(false);
     a.setApplicationName("KShare");
@@ -47,7 +35,9 @@ int main(int argc, char *argv[]) {
     a.setApplicationVersion("4.1");
 
     QString locale = QLocale::system().name();
-    if (locale != "en_US") loadTranslation(locale);
+    QTranslator translator;
+    if(translator.load(locale, ":/translations/"))
+        a.installTranslator(&translator);
 
     QCommandLineParser parser;
     parser.addHelpOption();
