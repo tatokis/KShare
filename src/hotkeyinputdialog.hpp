@@ -3,29 +3,31 @@
 
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
     class HotkeyInputDialog;
 }
 
-class HotkeyInputDialog : public QDialog {
+class HotkeyInputDialog : public QDialog
+{
     Q_OBJECT
 
 public:
-    explicit HotkeyInputDialog(QString hotkeyName, QKeySequence currentSeq, QWidget *parent = 0);
+    explicit HotkeyInputDialog(QString hotkeyName, QKeySequence currentSeq, QWidget* parent = 0);
     ~HotkeyInputDialog();
 
 signals:
     void sequenceSelected(QKeySequence seq, QString name);
 
 protected:
-    void keyPressEvent(QKeyEvent *e) override;
+    void keyPressEvent(QKeyEvent* e) override;
 
 private slots:
     void on_recordButton_clicked();
 
 private:
     bool recording = false;
-    Ui::HotkeyInputDialog *ui;
+    Ui::HotkeyInputDialog* ui;
 };
 
 #endif // HOTKEYINPUTDIALOG_HPP

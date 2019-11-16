@@ -1,7 +1,9 @@
 #include <formats.hpp>
 
-QString formats::normalFormatName(formats::Normal format) {
-    switch (format) {
+QString formats::normalFormatName(formats::Normal format)
+{
+    switch (format)
+    {
     case Normal::JPG:
         return "JPG";
     case Normal::PNG:
@@ -11,15 +13,21 @@ QString formats::normalFormatName(formats::Normal format) {
     }
 }
 
-formats::Normal formats::normalFormatFromName(QString format) {
-    if (format.toLower() == "jpg") return Normal::JPG;
-    if (format.toLower() == "jpeg") return Normal::JPG;
-    if (format.toLower() == "png") return Normal::PNG;
+formats::Normal formats::normalFormatFromName(QString format)
+{
+    if (format.toLower() == "jpg")
+        return Normal::JPG;
+    if (format.toLower() == "jpeg")
+        return Normal::JPG;
+    if (format.toLower() == "png")
+        return Normal::PNG;
     return Normal::None;
 }
 
-QString formats::normalFormatMIME(formats::Normal format) {
-    switch (format) {
+QString formats::normalFormatMIME(formats::Normal format)
+{
+    switch (format)
+    {
     case Normal::JPG:
         return "image/jpeg";
     case Normal::PNG:
@@ -29,8 +37,10 @@ QString formats::normalFormatMIME(formats::Normal format) {
     }
 }
 
-QString formats::recordingFormatName(formats::Recording format) {
-    switch (format) {
+QString formats::recordingFormatName(formats::Recording format)
+{
+    switch (format)
+    {
     case Recording::GIF:
         return "GIF";
     case Recording::WebM:
@@ -42,15 +52,21 @@ QString formats::recordingFormatName(formats::Recording format) {
     }
 }
 
-formats::Recording formats::recordingFormatFromName(QString format) {
-    if (format.toLower() == "gif") return Recording::GIF;
-    if (format.toLower() == "webm") return Recording::WebM;
-    if (format.toLower() == "mp4") return Recording::MP4;
+formats::Recording formats::recordingFormatFromName(QString format)
+{
+    if (format.toLower() == "gif")
+        return Recording::GIF;
+    if (format.toLower() == "webm")
+        return Recording::WebM;
+    if (format.toLower() == "mp4")
+        return Recording::MP4;
     return Recording::None;
 }
 
-QString formats::recordingFormatMIME(formats::Recording format) {
-    switch (format) {
+QString formats::recordingFormatMIME(formats::Recording format)
+{
+    switch (format)
+    {
     case Recording::GIF:
         return "image/gif";
     case Recording::WebM:

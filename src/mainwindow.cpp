@@ -16,18 +16,21 @@
 #include <settings.hpp>
 #include <uploaders/uploadersingleton.hpp>
 
-MainWindow *MainWindow::instance;
+MainWindow* MainWindow::instance;
 
-void MainWindow::rec() {
-    if (controller->isRunning()) return;
+void MainWindow::rec()
+{
+    if (controller->isRunning())
+        return;
     auto f = static_cast<formats::Recording>(
     settings::settings().value("recording/format", static_cast<int>(formats::Recording::None)).toInt());
-    if (f >= formats::Recording::None) {
+    if (f >= formats::Recording::None)
+    {
         logger::warn(tr("Recording format not set in settings. Aborting."));
         return;
     }
-    RecordingContext *ctx = new RecordingContext;
-    RecordingFormats *format = new RecordingFormats(f);
+    RecordingContext* ctx = new RecordingContext;
+    RecordingFormats* format = new RecordingFormats(f);
     ctx->consumer = format->getConsumer();
     ctx->finalizer = format->getFinalizer();
     ctx->validator = format->getValidator();
@@ -38,16 +41,18 @@ void MainWindow::rec() {
 }
 
 #define ACTION(english, menu)                                                                                          \
-    [&]() -> QAction * {                                                                                               \
-        QAction *a = menu->addAction(english);                                                                         \
+    [&]() -> QAction* {                                                                                                \
+        QAction* a = menu->addAction(english);                                                                         \
         return a;                                                                                                      \
     }()
 
-void addHotkey(QString name, std::function<void()> action) {
+void addHotkey(QString name, std::function<void()> action)
+{
     hotkeying::load(name, action);
 }
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
+MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWindow)
+{
     instance = this;
     ui->setupUi(this);
     setWindowIcon(QIcon(":/icons/icon.png"));
@@ -55,19 +60,19 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     tray->setToolTip(QApplication::applicationName());
     tray->setVisible(true);
     menu = new QMenu(this);
-    QAction *shtoggle = ACTION(tr("Show Window"), menu);
-    QAction *fullscreen = ACTION(tr("Desktop"), menu);
-    QAction *area = ACTION(tr("Selection"), menu);
+    QAction* shtoggle = ACTION(tr("Show Window"), menu);
+    QAction* fullscreen = ACTION(tr("Desktop"), menu);
+    QAction* area = ACTION(tr("Selection"), menu);
 
 #ifdef PLATFORM_CAPABILITY_ACTIVEWINDOW
-    QAction *active = ACTION(tr("Active window"), menu);
+    QAction* active = ACTION(tr("Active window"), menu);
     connect(active, &QAction::triggered, this, [] { screenshotter::activeDelayed(); });
 #endif
-    QAction *picker = ACTION(tr("Color picker"), menu);
-    QAction *rec = ACTION(tr("Record screen"), menu);
-    QAction *recoff = ACTION(tr("Stop recording"), menu);
-    QAction *recabort = ACTION(tr("Abort recording"), menu);
-    QAction *quit = ACTION(tr("Quit"), menu);
+    QAction* picker = ACTION(tr("Color picker"), menu);
+    QAction* rec = ACTION(tr("Record screen"), menu);
+    QAction* recoff = ACTION(tr("Stop recording"), menu);
+    QAction* recabort = ACTION(tr("Abort recording"), menu);
+    QAction* quit = ACTION(tr("Quit"), menu);
 
     menu->addAction(shtoggle);
     menu->addSeparator();
@@ -86,7 +91,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(picker, &QAction::triggered, [] { ColorPickerScene::showPicker(); });
     connect(tray, &QSystemTrayIcon::messageClicked, this, &QWidget::show);
     connect(tray, &QSystemTrayIcon::activated, this, [this](QSystemTrayIcon::ActivationReason reason) {
-        if (reason == QSystemTrayIcon::DoubleClick) toggleVisible();
+        if (reason == QSystemTrayIcon::DoubleClick)
+            toggleVisible();
     });
     connect(fullscreen, &QAction::triggered, this, [] { screenshotter::fullscreenDelayed(); });
     connect(area, &QAction::triggered, this, [] { screenshotter::areaDelayed(); });
@@ -106,93 +112,115 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     addHotkey("recordingstart", [&] { this->rec(); });
 
     auto errors = UploaderSingleton::inst().errors();
-    for (auto err : errors) ui->logBox->addItem(QString("ERROR: ") + err.what());
+    for (auto err : errors)
+        ui->logBox->addItem(QString("ERROR: ") + err.what());
     setWindowTitle(QApplication::applicationName());
     val = true;
 }
 
-MainWindow::~MainWindow() {
+MainWindow::~MainWindow()
+{
     delete ui;
 }
 
-bool MainWindow::valid() {
+bool MainWindow::valid()
+{
     return val;
 }
 
-MainWindow *MainWindow::inst() {
+MainWindow* MainWindow::inst()
+{
     return instance;
 }
 
-void MainWindow::closeEvent(QCloseEvent *event) {
-    if (settings::settings().value("hideOnClose", true).toBool()) {
+void MainWindow::closeEvent(QCloseEvent* event)
+{
+    if (settings::settings().value("hideOnClose", true).toBool())
+    {
         event->ignore();
         hide();
-    } else
+    }
+    else
         QApplication::exit(0);
 }
 
-void MainWindow::quit() {
+void MainWindow::quit()
+{
     QCoreApplication::quit();
 }
 
-void MainWindow::toggleVisible() {
+void MainWindow::toggleVisible()
+{
     this->setVisible(!this->isVisible());
-    if (this->isVisible()) {
+    if (this->isVisible())
+    {
         this->raise();                          // that didn't work
         this->setWindowState(Qt::WindowActive); // maybe that works
         this->activateWindow();                 // maybe that works
     }
 }
 
-void MainWindow::on_actionQuit_triggered() {
+void MainWindow::on_actionQuit_triggered()
+{
     quit();
 }
 
-void MainWindow::on_actionFullscreen_triggered() {
+void MainWindow::on_actionFullscreen_triggered()
+{
     screenshotter::fullscreenDelayed();
 }
 
-void MainWindow::on_actionArea_triggered() {
+void MainWindow::on_actionArea_triggered()
+{
     screenshotter::areaDelayed();
 }
 
-void MainWindow::on_actionStart_triggered() {
+void MainWindow::on_actionStart_triggered()
+{
     rec();
 }
 
-void MainWindow::on_actionStop_triggered() {
+void MainWindow::on_actionStop_triggered()
+{
     controller->end();
 }
 
-void MainWindow::on_actionColor_Picker_triggered() {
+void MainWindow::on_actionColor_Picker_triggered()
+{
     ColorPickerScene::showPicker();
 }
 
-void MainWindow::on_actionSettings_triggered() {
-    SettingsDialog *dialog = new SettingsDialog(this);
+void MainWindow::on_actionSettings_triggered()
+{
+    SettingsDialog* dialog = new SettingsDialog(this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }
 
-void MainWindow::on_actionAbout_triggered() {
-    AboutBox *box = new AboutBox(this);
+void MainWindow::on_actionAbout_triggered()
+{
+    AboutBox* box = new AboutBox(this);
     box->setAttribute(Qt::WA_DeleteOnClose);
     box->show();
 }
 
-void MainWindow::on_actionActive_window_triggered() {
+void MainWindow::on_actionActive_window_triggered()
+{
     screenshotter::activeDelayed();
 }
 
-void MainWindow::on_actionAbort_triggered() {
+void MainWindow::on_actionAbort_triggered()
+{
     controller->abort();
 }
 
-void MainWindow::on_history_clicked() {
-    HistoryDialog *dialog = new HistoryDialog;
+void MainWindow::on_history_clicked()
+{
+    HistoryDialog* dialog = new HistoryDialog;
     dialog->show();
 }
 
-void MainWindow::setTrayIcon(QIcon icon) {
+void MainWindow::setTrayIcon(QIcon icon)
+{
     tray->setIcon(icon);
 }

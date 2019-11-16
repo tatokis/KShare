@@ -3,10 +3,11 @@
 
 #include <QValidator>
 
-class FilenameValidator : public QValidator {
+class FilenameValidator : public QValidator
+{
 public:
-    FilenameValidator(QObject *parent = nullptr);
-    QValidator::State validate(QString &input, int &) const override;
+    FilenameValidator(QObject* parent = nullptr);
+    QValidator::State validate(QString& input, int&) const override;
 };
 
 #endif // FILENAMEVALIDATOR_HPP

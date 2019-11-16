@@ -7,7 +7,8 @@
 #include <formatter.hpp>
 #include <iostream>
 #include <ui_mainwindow.h>
-extern "C" {
+extern "C"
+{
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 }
@@ -22,7 +23,8 @@ extern "C" {
 // still alive
 bool stillAlive = true;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[])
+{
 #if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(58, 9, 100)
     av_register_all();
 #endif
@@ -36,7 +38,7 @@ int main(int argc, char *argv[]) {
 
     QString locale = QLocale::system().name();
     QTranslator translator;
-    if(translator.load(locale, ":/translations/"))
+    if (translator.load(locale, ":/translations/"))
         a.installTranslator(&translator);
 
     QCommandLineParser parser;
@@ -48,7 +50,8 @@ int main(int argc, char *argv[]) {
     parser.addOption(ver);
     parser.process(a);
 
-    if (parser.isSet(ver)) {
+    if (parser.isSet(ver))
+    {
         printf("%s %s\n", a.applicationName().toLocal8Bit().constData(), a.applicationVersion().toLocal8Bit().constData());
         return 0;
     }
@@ -58,6 +61,7 @@ int main(int argc, char *argv[]) {
     a.connect(&a, &QApplication::aboutToQuit, Worker::end);
     a.connect(&a, &QApplication::aboutToQuit, [] { stillAlive = false; });
 
-    if (!parser.isSet(bg)) w.show();
+    if (!parser.isSet(bg))
+        w.show();
     return a.exec();
 }

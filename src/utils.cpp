@@ -10,11 +10,13 @@
 #include <platformbackend.hpp>
 #include <settings.hpp>
 
-QColor utils::invertColor(QColor color) {
+QColor utils::invertColor(QColor color)
+{
     return QColor(255 - color.red(), 255 - color.green(), 255 - color.blue());
 }
 
-QPixmap utils::extend(QPixmap img, int extraSize, QColor hl) {
+QPixmap utils::extend(QPixmap img, int extraSize, QColor hl)
+{
     QPixmap newImg(img.width() + extraSize * 2, img.height() + extraSize * 2);
     newImg.fill(hl);
     QPainter ptr(&newImg);
@@ -23,7 +25,8 @@ QPixmap utils::extend(QPixmap img, int extraSize, QColor hl) {
     return newImg;
 }
 
-QPixmap utils::fullscreen(bool cursor) {
+QPixmap utils::fullscreen(bool cursor)
+{
     QPixmap image;
     QPainter painter;
     QPoint smallestCoordinate = smallestScreenCoordinate();
@@ -31,14 +34,18 @@ QPixmap utils::fullscreen(bool cursor) {
 // Hack for https://bugreports.qt.io/browse/QTBUG-58110
 #ifdef Q_OS_LINUX
     static QStringList qVer = QString(qVersion()).split('.');
-    if (qVer.at(0).toInt() == 5 && qVer.at(1).toInt() < 9) {
+    if (qVer.at(0).toInt() == 5 && qVer.at(1).toInt() < 9)
+    {
         image = window(0);
         painter.begin(&image);
-    } else {
+    }
+    else
+    {
 #endif
         int height = 0, width = 0;
         int ox = smallestCoordinate.x() * -1, oy = smallestCoordinate.y() * -1;
-        for (QScreen *screen : QApplication::screens()) {
+        for (QScreen* screen : QApplication::screens())
+        {
             QRect geo = screen->geometry();
             width = qMax(ox + geo.left() + geo.width(), width);
             height = qMax(oy + geo.top() + geo.height(), height);
@@ -49,7 +56,8 @@ QPixmap utils::fullscreen(bool cursor) {
         painter.begin(&image);
         painter.translate(ox, oy);
 
-        for (QScreen *screen : QApplication::screens()) {
+        for (QScreen* screen : QApplication::screens())
+        {
             QPixmap currentScreen = window(0, screen);
             QRect geo = screen->geometry();
             painter.drawPixmap(geo.left(), geo.top(), geo.width(), geo.height(), currentScreen);
@@ -60,7 +68,8 @@ QPixmap utils::fullscreen(bool cursor) {
 #endif
 
 #ifdef PLATFORM_CAPABILITY_CURSOR
-    if (cursor) {
+    if (cursor)
+    {
         auto cursorData = PlatformBackend::inst().getCursor();
         painter.drawPixmap(QCursor::pos() - std::get<0>(cursorData), std::get<1>(cursorData));
     }
@@ -69,33 +78,40 @@ QPixmap utils::fullscreen(bool cursor) {
     return image;
 }
 
-QPixmap utils::window(WId wid, QScreen *w) {
+QPixmap utils::window(WId wid, QScreen* w)
+{
     return w->grabWindow(wid);
 }
 
-void utils::toClipboard(QString value) {
+void utils::toClipboard(QString value)
+{
     QApplication::clipboard()->setText(value);
 }
 
-QPixmap utils::fullscreenArea(bool cursor, qreal x, qreal y, qreal w, qreal h) {
+QPixmap utils::fullscreenArea(bool cursor, qreal x, qreal y, qreal w, qreal h)
+{
     return fullscreen(cursor).copy(x, y, w, h);
 }
 
-QPoint utils::smallestScreenCoordinate() {
+QPoint utils::smallestScreenCoordinate()
+{
     QPoint smallestCoordinate;
-    for (QScreen *screen : QApplication::screens()) {
+    for (QScreen* screen : QApplication::screens())
+    {
         smallestCoordinate.rx() = qMin(smallestCoordinate.x(), screen->geometry().left());
         smallestCoordinate.ry() = qMin(smallestCoordinate.y(), screen->geometry().top());
     }
     return smallestCoordinate;
 }
 
-QPixmap utils::renderText(QString toRender, int padding, QColor background, QColor pen, QFont font) {
+QPixmap utils::renderText(QString toRender, int padding, QColor background, QColor pen, QFont font)
+{
     QFontMetrics metric(font);
     QStringList lines = toRender.replace("\r", "").split('\n');
     QSize resultingSize(0, padding * 2);
     int lineSpace = metric.leading();
-    for (QString line : lines) {
+    for (QString line : lines)
+    {
         QRect br = metric.boundingRect(line);
         resultingSize.rheight() += lineSpace + br.height();
         resultingSize.rwidth() = qMax(br.width(), resultingSize.width());
@@ -106,7 +122,8 @@ QPixmap utils::renderText(QString toRender, int padding, QColor background, QCol
     QPainter painter(&renderred);
     painter.setPen(pen);
     int y = padding;
-    for (QString line : lines) {
+    for (QString line : lines)
+    {
         QRect br = metric.boundingRect(line);
         painter.drawText(padding, y, br.width(), br.height(), 0, line);
         y += lineSpace + br.height();
@@ -115,29 +132,38 @@ QPixmap utils::renderText(QString toRender, int padding, QColor background, QCol
     return renderred;
 }
 
-QString utils::randomString(int length) {
+QString utils::randomString(int length)
+{
     QString str;
     str.resize(length);
-    for (int s = 0; s < length; s++) str[s] = QChar('A' + char(rand() % ('Z' - 'A')));
+    for (int s = 0; s < length; s++)
+        str[s] = QChar('A' + char(rand() % ('Z' - 'A')));
     return str;
 }
 
-void utils::externalScreenshot(std::function<void(QPixmap)> callback) {
+void utils::externalScreenshot(std::function<void(QPixmap)> callback)
+{
     QString cmd = settings::settings().value("command/fullscreenCommand", "").toString();
     QStringList args = cmd.split(' ');
     QString tempPath;
-    for (QString &arg : args) {
-        if (arg == "%FILE_PATH") {
-            if (tempPath.isEmpty()) tempPath = "KShare-Ext-Screenshot." + randomString(5);
+    for (QString& arg : args)
+    {
+        if (arg == "%FILE_PATH")
+        {
+            if (tempPath.isEmpty())
+                tempPath = "KShare-Ext-Screenshot." + randomString(5);
             arg = tempPath;
         }
     }
-    QProcess *process = new QProcess;
+    QProcess* process = new QProcess;
     QObject::connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
                      [callback, process, tempPath](int code, QProcess::ExitStatus) {
-                         if (code != 0) {
+                         if (code != 0)
+                         {
                              logger::fatal(QObject::tr("Failed to take external screenshot: \n") + process->readAllStandardError());
-                         } else {
+                         }
+                         else
+                         {
                              QPixmap pixmap;
                              if (!tempPath.isEmpty())
                                  pixmap.load(tempPath);
@@ -145,30 +171,39 @@ void utils::externalScreenshot(std::function<void(QPixmap)> callback) {
                                  pixmap.loadFromData(process->readAllStandardOutput());
                              callback(pixmap);
                          }
-                         if (!tempPath.isEmpty()) QFile(tempPath).remove();
+                         if (!tempPath.isEmpty())
+                             QFile(tempPath).remove();
                      });
     QObject::connect(process, &QProcess::errorOccurred, [](QProcess::ProcessError err) {
-        if (err == QProcess::FailedToStart) settings::settings().remove("command/fullscreenCommand");
+        if (err == QProcess::FailedToStart)
+            settings::settings().remove("command/fullscreenCommand");
     });
     process->start(args.takeFirst(), args);
 }
 
-void utils::externalScreenshotActive(std::function<void(QPixmap)> callback) {
+void utils::externalScreenshotActive(std::function<void(QPixmap)> callback)
+{
     QString cmd = settings::settings().value("command/activeCommand", "").toString();
     QStringList args = cmd.split(' ');
     QString tempPath;
-    for (QString &arg : args) {
-        if (arg == "%FILE_PATH") {
-            if (tempPath.isEmpty()) tempPath = "KShare-Ext-Screenshot." + randomString(5);
+    for (QString& arg : args)
+    {
+        if (arg == "%FILE_PATH")
+        {
+            if (tempPath.isEmpty())
+                tempPath = "KShare-Ext-Screenshot." + randomString(5);
             arg = tempPath;
         }
     }
-    QProcess *process = new QProcess;
+    QProcess* process = new QProcess;
     QObject::connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
                      [callback, process, tempPath](int code, QProcess::ExitStatus) {
-                         if (code != 0) {
+                         if (code != 0)
+                         {
                              logger::fatal(QObject::tr("Failed to take external screenshot: \n") + process->readAllStandardError());
-                         } else {
+                         }
+                         else
+                         {
                              QPixmap pixmap;
                              if (!tempPath.isEmpty())
                                  pixmap.load(tempPath);
@@ -176,37 +211,47 @@ void utils::externalScreenshotActive(std::function<void(QPixmap)> callback) {
                                  pixmap.loadFromData(process->readAllStandardOutput());
                              callback(pixmap);
                          }
-                         if (!tempPath.isEmpty()) QFile(tempPath).remove();
+                         if (!tempPath.isEmpty())
+                             QFile(tempPath).remove();
                      });
     QObject::connect(process, &QProcess::errorOccurred, [](QProcess::ProcessError err) {
-        if (err == QProcess::FailedToStart) settings::settings().remove("command/activeCommand");
+        if (err == QProcess::FailedToStart)
+            settings::settings().remove("command/activeCommand");
     });
     process->start(args.takeFirst(), args);
 }
 
-QIcon defaultIcon() {
+QIcon defaultIcon()
+{
     static QIcon icon = QIcon(":/icons/icon.png");
     return icon;
 }
 
-QIcon infinity() {
+QIcon infinity()
+{
     static QIcon icon = QIcon(":/icons/infinity.png");
     return icon;
 }
 
-QIcon utils::getTrayIcon(int num) {
-    if (!num) {
+QIcon utils::getTrayIcon(int num)
+{
+    if (!num)
+    {
         return defaultIcon();
-    } else if (num < 100) {
+    }
+    else if (num < 100)
+    {
         QPixmap unscaled = utils::renderText(QString::number(num), 0, Qt::lightGray, Qt::black);
         int dim = qMax(unscaled.width(), unscaled.height());
         QPixmap scaled(dim, dim);
         scaled.fill(Qt::lightGray);
-        QPainter *painter = new QPainter(&scaled);
+        QPainter* painter = new QPainter(&scaled);
         painter->drawPixmap((dim / 2) - (unscaled.width() / 2), 0, unscaled);
         delete painter;
         return scaled;
-    } else {
+    }
+    else
+    {
         return infinity();
     }
 }

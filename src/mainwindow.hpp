@@ -10,11 +10,13 @@
 #include <recording/recordingcontroller.hpp>
 #include <uploaders/uploader.hpp>
 
-namespace Ui {
+namespace Ui
+{
     class MainWindow;
 }
 
-class MainWindow : public QMainWindow {
+class MainWindow : public QMainWindow
+{
     Q_OBJECT
 private slots:
     void quit();
@@ -33,25 +35,25 @@ private slots:
     void on_history_clicked();
 
 public:
-    static MainWindow *inst();
-    explicit MainWindow(QWidget *parent = 0);
+    static MainWindow* inst();
+    explicit MainWindow(QWidget* parent = 0);
     ~MainWindow();
     bool valid();
     void setTrayIcon(QIcon icon);
-    RecordingController *controller = new RecordingController;
+    RecordingController* controller = new RecordingController;
 
-    QSystemTrayIcon *tray;
-    Ui::MainWindow *ui;
+    QSystemTrayIcon* tray;
+    Ui::MainWindow* ui;
 public slots:
     void rec();
 
 private:
     bool val = false;
-    QMenu *menu;
-    static MainWindow *instance;
+    QMenu* menu;
+    static MainWindow* instance;
 
 protected:
-    void closeEvent(QCloseEvent *event) override;
+    void closeEvent(QCloseEvent* event) override;
 };
 
 #endif // MAINWINDOW_HPP

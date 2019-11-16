@@ -3,7 +3,8 @@
 
 #include <QString>
 
-namespace logger {
+namespace logger
+{
     void info(QString info);  // Something went okay, notify user about it
     void warn(QString info);  // Something that does not interrupt execution, but could be improved
     void error(QString info); // Oh no - it errored, but is recoverable, and still important enough to notify
