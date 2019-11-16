@@ -20,8 +20,6 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 private slots:
     void quit();
-    void toggleVisible();
-
     void on_actionQuit_triggered();
     void on_actionFullscreen_triggered();
     void on_actionArea_triggered();
@@ -49,7 +47,6 @@ public slots:
 
 private:
     bool val = false;
-    QMenu* menu;
     static MainWindow* instance;
 
 protected:

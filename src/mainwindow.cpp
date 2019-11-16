@@ -59,8 +59,8 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
     tray = new QSystemTrayIcon(windowIcon(), this);
     tray->setToolTip(QApplication::applicationName());
     tray->setVisible(true);
-    menu = new QMenu(this);
-    QAction* shtoggle = ACTION(tr("Show Window"), menu);
+    QMenu* menu = new QMenu(this);
+    QAction* shwnd = ACTION(tr("Show Window"), menu);
     QAction* fullscreen = ACTION(tr("Desktop"), menu);
     QAction* area = ACTION(tr("Selection"), menu);
 
@@ -74,7 +74,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
     QAction* recabort = ACTION(tr("Abort recording"), menu);
     QAction* quit = ACTION(tr("Quit"), menu);
 
-    menu->addAction(shtoggle);
+    menu->addAction(shwnd);
     menu->addSeparator();
     menu->addAction(picker);
     menu->addSeparator();
@@ -87,12 +87,12 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
     menu->addSeparator();
     menu->addAction(quit);
     connect(quit, &QAction::triggered, this, &MainWindow::quit);
-    connect(shtoggle, &QAction::triggered, this, &MainWindow::toggleVisible);
+    connect(shwnd, &QAction::triggered, this, &QMainWindow::show);
     connect(picker, &QAction::triggered, [] { ColorPickerScene::showPicker(); });
-    connect(tray, &QSystemTrayIcon::messageClicked, this, &QWidget::show);
+    connect(tray, &QSystemTrayIcon::messageClicked, this, &QMainWindow::show);
     connect(tray, &QSystemTrayIcon::activated, this, [this](QSystemTrayIcon::ActivationReason reason) {
         if (reason == QSystemTrayIcon::DoubleClick)
-            toggleVisible();
+            show();
     });
     connect(fullscreen, &QAction::triggered, this, [] { screenshotter::fullscreenDelayed(); });
     connect(area, &QAction::triggered, this, [] { screenshotter::areaDelayed(); });
@@ -147,17 +147,6 @@ void MainWindow::closeEvent(QCloseEvent* event)
 void MainWindow::quit()
 {
     QCoreApplication::quit();
-}
-
-void MainWindow::toggleVisible()
-{
-    this->setVisible(!this->isVisible());
-    if (this->isVisible())
-    {
-        this->raise();                          // that didn't work
-        this->setWindowState(Qt::WindowActive); // maybe that works
-        this->activateWindow();                 // maybe that works
-    }
 }
 
 void MainWindow::on_actionQuit_triggered()

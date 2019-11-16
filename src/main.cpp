@@ -17,12 +17,6 @@ extern "C"
 #include <notifications.hpp>
 #include <worker/worker.hpp>
 
-// I've experiments to run
-// There is research to be done
-// On the people who are
-// still alive
-bool stillAlive = true;
-
 int main(int argc, char* argv[])
 {
 #if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(58, 9, 100)
@@ -59,7 +53,6 @@ int main(int argc, char* argv[])
     MainWindow w;
     Worker::init();
     a.connect(&a, &QApplication::aboutToQuit, Worker::end);
-    a.connect(&a, &QApplication::aboutToQuit, [] { stillAlive = false; });
 
     if (!parser.isSet(bg))
         w.show();
