@@ -16,8 +16,6 @@ extern "C" {
 #include <notifications.hpp>
 #include <worker/worker.hpp>
 
-bool verbose = false;
-
 // I've experiments to run
 // There is research to be done
 // On the people who are
@@ -54,11 +52,9 @@ int main(int argc, char *argv[]) {
     QCommandLineParser parser;
     parser.addHelpOption();
 
-    QCommandLineOption h({ "b", "background" }, "Does not show the main window, starts in tray.");
-    QCommandLineOption v({ "v", "verbose" }, "Enables QtDebugMsg outputs");
-    QCommandLineOption ver({ "ver", "version" }, "Prints KShare version");
-    parser.addOption(h);
-    parser.addOption(v);
+    QCommandLineOption bg({ "b", "background" }, "Does not show the main window, starts in tray.");
+    QCommandLineOption ver({ "v", "version" }, "Prints KShare version");
+    parser.addOption(bg);
     parser.addOption(ver);
     parser.process(a);
 
@@ -67,12 +63,11 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    verbose = parser.isSet(v);
     MainWindow w;
     Worker::init();
     a.connect(&a, &QApplication::aboutToQuit, Worker::end);
     a.connect(&a, &QApplication::aboutToQuit, [] { stillAlive = false; });
 
-    if (!parser.isSet(h)) w.show();
+    if (!parser.isSet(bg)) w.show();
     return a.exec();
 }
