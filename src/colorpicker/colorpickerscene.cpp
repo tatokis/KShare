@@ -14,7 +14,9 @@ ColorPickerScene::ColorPickerScene(QPixmap pixmap, QWidget *parentWidget)
     setWindowTitle(tr("KShare Color Picker"));
     setAttribute(Qt::WA_DeleteOnClose);
     setCursor(Qt::BlankCursor);
-
+#ifdef Q_OS_LINUX
+    setWindowFlags(Qt::X11BypassWindowManagerHint);
+#endif
     activateWindow();
     setGeometry(pixmap.rect());
     ScreenOverlay::show();
