@@ -4,13 +4,16 @@
 #include <QApplication>
 #include <uploaders/uploader.hpp>
 
-class NullUploader : public Uploader {
+class NullUploader : public Uploader
+{
     Q_DECLARE_TR_FUNCTIONS(NullUploader)
 public:
-    QString name() {
+    QString name()
+    {
         return "null";
     }
-    QString description() {
+    QString description()
+    {
         return "Does absolutely nothing. Useful for just saving images.";
     }
 

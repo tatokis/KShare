@@ -8,11 +8,13 @@
 
 static QSize max(300, 300);
 
-inline bool sizeGreater(QSize one, QSize two) {
+inline bool sizeGreater(QSize one, QSize two)
+{
     return one.height() > two.height() || one.width() > two.width();
 }
 
-RecordingPreview::RecordingPreview(QRect area, QWidget *parent) : QWidget(parent) {
+RecordingPreview::RecordingPreview(QRect area, QWidget* parent) : QWidget(parent)
+{
     recordingArea = area;
     setStyleSheet("background-color: rgba(0, 0, 0, 0.7);");
     setAttribute(Qt::WA_TranslucentBackground);
@@ -28,7 +30,8 @@ RecordingPreview::RecordingPreview(QRect area, QWidget *parent) : QWidget(parent
         if (frameGeometry().intersects(recordingArea))
             move(QApplication::primaryScreen()->size().width() - rect().width(),
                  QApplication::primaryScreen()->size().height() - rect().height());
-        if (!frameGeometry().intersects(recordingArea)) show();
+        if (!frameGeometry().intersects(recordingArea))
+            show();
     });
     label = new QLabel;
     hintLabel = new QLabel;
@@ -46,16 +49,19 @@ RecordingPreview::RecordingPreview(QRect area, QWidget *parent) : QWidget(parent
     hintLabel->setText(QString(tr("Time: 00:00\nFrame: 0\nStop key: ")) + hotkeying::sequence("recordingstop"));
 }
 
-RecordingPreview::~RecordingPreview() {
+RecordingPreview::~RecordingPreview()
+{
     // delete everything;
     delete label;
     delete hintLabel;
 }
 
-void RecordingPreview::setPixmap(QPixmap map) {
+void RecordingPreview::setPixmap(QPixmap map)
+{
     label->setPixmap(map.scaled(size));
 }
-void RecordingPreview::setTime(QString time, int frame) {
+void RecordingPreview::setTime(QString time, int frame)
+{
     if (isVisible())
         hintLabel->setText(tr("Time: %1\nFrame: %2\nStop key: %3").arg(time).arg(frame).arg(hotkeying::sequence("recordingstop")));
 }

@@ -5,13 +5,16 @@
 #include <QPixmap>
 #include <uploaders/uploader.hpp>
 
-class ClipboardUploader : public Uploader {
+class ClipboardUploader : public Uploader
+{
     Q_DECLARE_TR_FUNCTIONS(ClipboardUploader)
 public:
-    QString name() {
+    QString name()
+    {
         return "clipboard";
     }
-    QString description() {
+    QString description()
+    {
         return "Copies the image to clipboard";
     }
 

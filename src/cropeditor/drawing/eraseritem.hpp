@@ -3,15 +3,18 @@
 
 #include "drawitem.hpp"
 
-class EraserItem : public DrawItem {
+class EraserItem : public DrawItem
+{
 public:
     EraserItem();
     ~EraserItem();
-    QString name() override {
+    QString name() override
+    {
         return "Eraser";
     }
-    void mouseDragEvent(QGraphicsSceneMouseEvent *, CropScene *scene) override;
-    void mouseDragEndEvent(QGraphicsSceneMouseEvent *, CropScene *) override {
+    void mouseDragEvent(QGraphicsSceneMouseEvent*, CropScene* scene) override;
+    void mouseDragEndEvent(QGraphicsSceneMouseEvent*, CropScene*) override
+    {
     }
 };
 

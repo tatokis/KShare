@@ -9,11 +9,13 @@
 #define PLATFORM_CAPABILITY_CURSOR
 #define PLATFORM_CAPABILITY_CURRENT_USER
 
-class PlatformBackend {
+class PlatformBackend
+{
 public:
     std::tuple<QPoint, QPixmap> getCursor();
     DWORD pid();
-    static PlatformBackend &inst() {
+    static PlatformBackend& inst()
+    {
         static PlatformBackend inst;
         return inst;
     }

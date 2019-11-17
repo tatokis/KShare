@@ -12,7 +12,8 @@
 #include <functional>
 #include <memory>
 
-struct RecordingContext {
+struct RecordingContext
+{
     QImage::Format format;
     std::function<void(QImage)> consumer;
     std::function<bool(QSize)> validator;
@@ -21,20 +22,22 @@ struct RecordingContext {
     QString anotherFormat;
 };
 
-struct _QueueContext {
+struct _QueueContext
+{
     QString file;
     QString format;
     std::function<void()> postUploadTask;
 };
 
-class RecordingController : public QObject {
+class RecordingController : public QObject
+{
     Q_OBJECT
 public:
     RecordingController();
     bool isRunning();
 public slots:
     // Returns false if isRunning
-    bool start(RecordingContext *context);
+    bool start(RecordingContext* context);
     // Returns false if not running
     bool end();
     void queue(_QueueContext arr);
@@ -48,9 +51,9 @@ private:
     QMutex timerl;
     QQueue<_QueueContext> uploadQueue;
     QRect area;
-    RecordingContext *_context = 0;
+    RecordingContext* _context = 0;
     QTimer timer;
-    RecordingPreview *preview = nullptr;
+    RecordingPreview* preview = nullptr;
     unsigned int frame = 0;
     unsigned int time = 0;
 signals:

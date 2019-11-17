@@ -12,7 +12,8 @@
 #include <cropeditor/cropview.hpp>
 #include <settings.hpp>
 
-BrushPenSelection::BrushPenSelection(CropScene *scene) : QDialog(), ui(new Ui::BrushPenSelection) {
+BrushPenSelection::BrushPenSelection(CropScene* scene) : QDialog(), ui(new Ui::BrushPenSelection)
+{
     ui->setupUi(this);
 
     ui->animated->setChecked(settings::settings().value("blur/animatedHint", false).toBool());
@@ -42,21 +43,25 @@ BrushPenSelection::BrushPenSelection(CropScene *scene) : QDialog(), ui(new Ui::B
     this->scene = scene;
 }
 
-BrushPenSelection::~BrushPenSelection() {
+BrushPenSelection::~BrushPenSelection()
+{
     delete ui;
 }
 
-void BrushPenSelection::on_penColor_clicked(bool) {
+void BrushPenSelection::on_penColor_clicked(bool)
+{
     pen = QColorDialog::getColor(pen, this, tr("Pen Color"));
     pen.setAlpha(ui->penAlphaSpin->value());
 }
 
-void BrushPenSelection::on_brushColor_clicked(bool) {
+void BrushPenSelection::on_brushColor_clicked(bool)
+{
     brush = QColorDialog::getColor(brush, this, tr("Brush Color"));
     brush.setAlpha(ui->alphaSpin->value());
 }
 
-void BrushPenSelection::on_buttonBox_accepted() {
+void BrushPenSelection::on_buttonBox_accepted()
+{
     scene->pen().setColor(pen);
     scene->pen().setCosmetic(ui->cosmetic->isChecked());
     scene->pen().setWidthF(ui->widthSpinner->value());
@@ -79,30 +84,37 @@ void BrushPenSelection::on_buttonBox_accepted() {
     close();
 }
 
-void BrushPenSelection::on_buttonBox_rejected() {
+void BrushPenSelection::on_buttonBox_rejected()
+{
     close();
 }
 
-void BrushPenSelection::on_widthSlider_sliderMoved(int position) {
+void BrushPenSelection::on_widthSlider_sliderMoved(int position)
+{
     ui->widthSpinner->setValue(position / 100.);
 }
 
-void BrushPenSelection::on_widthSpinner_valueChanged(double arg) {
+void BrushPenSelection::on_widthSpinner_valueChanged(double arg)
+{
     ui->widthSlider->setValue(arg * 100);
 }
 
-void BrushPenSelection::on_radSpinner_valueChanged(double arg1) {
+void BrushPenSelection::on_radSpinner_valueChanged(double arg1)
+{
     ui->radSlider->setValue(arg1 * 100);
 }
 
-void BrushPenSelection::on_radSlider_sliderMoved(int position) {
+void BrushPenSelection::on_radSlider_sliderMoved(int position)
+{
     ui->radSpinner->setValue(position / 100.);
 }
 
-void BrushPenSelection::on_alphaSpin_valueChanged(int arg1) {
+void BrushPenSelection::on_alphaSpin_valueChanged(int arg1)
+{
     brush.setAlpha(arg1);
 }
 
-void BrushPenSelection::on_penAlphaSpin_valueChanged(int arg1) {
+void BrushPenSelection::on_penAlphaSpin_valueChanged(int arg1)
+{
     pen.setAlpha(arg1);
 }

@@ -6,29 +6,37 @@
 #include <settings.hpp>
 
 
-namespace requestlogging {
-    struct RequestContext {
+namespace requestlogging
+{
+    struct RequestContext
+    {
         QByteArray response;
-        QNetworkReply *reply;
+        QNetworkReply* reply;
     };
 
-    class LoggedRequest {
+    class LoggedRequest
+    {
         friend QList<LoggedRequest> getRequests();
 
     public:
-        QString getUrl() {
+        QString getUrl()
+        {
             return url;
         }
-        QString getType() {
+        QString getType()
+        {
             return type;
         }
-        QString getTime() {
+        QString getTime()
+        {
             return time;
         }
-        int getResponseCode() {
+        int getResponseCode()
+        {
             return responseCode;
         }
-        QByteArray getResponse() {
+        QByteArray getResponse()
+        {
             return QFile(settings::dir().absoluteFilePath("responses/" + time)).readAll();
         }
 
@@ -42,7 +50,8 @@ namespace requestlogging {
     QList<LoggedRequest> getRequests();
     void addEntry(RequestContext context);
 
-    namespace indicator {
+    namespace indicator
+    {
         void show(int count);
     } // namespace indicator
 } // namespace requestlogging

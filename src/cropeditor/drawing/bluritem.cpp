@@ -2,7 +2,8 @@
 
 #include <settings.hpp>
 
-bool BlurItem::init(CropScene *) {
+bool BlurItem::init(CropScene*)
+{
     effect = new QGraphicsBlurEffect;
     QFlags<QGraphicsBlurEffect::BlurHint> blurHints;
     blurHints.setFlag(QGraphicsBlurEffect::AnimationHint, settings::settings().value("blur/animatedHint", false).toBool());
@@ -13,14 +14,18 @@ bool BlurItem::init(CropScene *) {
     return true;
 }
 
-void BlurItem::mouseDragEvent(QGraphicsSceneMouseEvent *, CropScene *scene) {
-    if (pos.isNull()) {
+void BlurItem::mouseDragEvent(QGraphicsSceneMouseEvent*, CropScene* scene)
+{
+    if (pos.isNull())
+    {
         pos = scene->cursorPos();
         rect = scene->addRect(QRect(scene->cursorPos().toPoint(), QSize(1, 1)), QPen(scene->highlight()), Qt::NoBrush);
         pixmap = scene->addPixmap(scene->pixmap().copy(rect->rect().toRect()));
         pixmap->setPos(scene->cursorPos());
         pixmap->setGraphicsEffect(effect);
-    } else {
+    }
+    else
+    {
         QPointF p = scene->cursorPos();
         rect->setRect(QRect(qMin(pos.x(), p.x()), qMin(pos.y(), p.y()), qAbs(pos.x() - p.x()), qAbs(pos.y() - p.y())));
         auto area = rect->rect();
@@ -30,7 +35,8 @@ void BlurItem::mouseDragEvent(QGraphicsSceneMouseEvent *, CropScene *scene) {
     }
 }
 
-void BlurItem::mouseDragEndEvent(QGraphicsSceneMouseEvent *, CropScene *) {
+void BlurItem::mouseDragEndEvent(QGraphicsSceneMouseEvent*, CropScene*)
+{
     delete rect;
     rect = 0;
 }

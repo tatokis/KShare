@@ -2,7 +2,7 @@
 #include <chrono>
 #include <thread>
 
-Worker *Worker::inst = 0;
+Worker* Worker::inst = 0;
 QMutex Worker::workerLock;
 QMutex Worker::lock;
 
@@ -12,10 +12,11 @@ QMutex Worker::lock;
 // 2. Queue onto the worker, where:
 //  1. Convert the image to the right format
 //  2. Consume the image.
-void Worker::queue(WorkerContext *context) {
+void Worker::queue(WorkerContext* context)
+{
     init();
     QMutexLocker ml(&lock);
-    _WorkerContext *c = new _WorkerContext;
+    _WorkerContext* c = new _WorkerContext;
     c->image = context->pixmap.toImage();
     c->consumer = context->consumer;
     c->targetFormat = context->targetFormat;
@@ -23,12 +24,15 @@ void Worker::queue(WorkerContext *context) {
     inst->qqueue.enqueue(std::move(c));
 }
 
-void Worker::init() {
+void Worker::init()
+{
     QMutexLocker ml(&workerLock);
-    if (!inst) inst = new Worker;
+    if (!inst)
+        inst = new Worker;
 }
 
-Worker::Worker() : QObject() {
+Worker::Worker() : QObject()
+{
     thr = new QThread;
     moveToThread(thr);
     connect(thr, &QThread::started, this, &Worker::process);
@@ -38,34 +42,42 @@ Worker::Worker() : QObject() {
     thr->start();
 }
 
-Worker::~Worker() {
+Worker::~Worker()
+{
     _end();
 }
 
-void Worker::end() {
+void Worker::end()
+{
     inst->_end();
 }
 
-void Worker::_end() {
+void Worker::_end()
+{
     QMutexLocker ml(&endLock);
     _ended = true;
 }
 
-bool Worker::ended() {
+bool Worker::ended()
+{
     QMutexLocker ml(&endLock);
     return _ended;
 }
 
-void Worker::process() {
-    while (!ended()) {
+void Worker::process()
+{
+    while (!ended())
+    {
         lock.lock();
-        if (!qqueue.isEmpty()) {
-            _WorkerContext *c = qqueue.dequeue();
+        if (!qqueue.isEmpty())
+        {
+            _WorkerContext* c = qqueue.dequeue();
             lock.unlock();
             c->consumer(c->image.convertToFormat(c->targetFormat));
             delete c->underlyingThing;
             delete c;
-        } else
+        }
+        else
             lock.unlock();
         std::this_thread::sleep_for(std::chrono::milliseconds(10)); // STL likes it's scopes
     }

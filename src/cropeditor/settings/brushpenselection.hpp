@@ -4,15 +4,17 @@
 #include <QDialog>
 #include <cropeditor/cropscene.hpp>
 
-namespace Ui {
+namespace Ui
+{
     class BrushPenSelection;
 }
 
-class BrushPenSelection : public QDialog {
+class BrushPenSelection : public QDialog
+{
     Q_OBJECT
 
 public:
-    explicit BrushPenSelection(CropScene *scene);
+    explicit BrushPenSelection(CropScene* scene);
     ~BrushPenSelection();
 
 private slots:
@@ -28,8 +30,8 @@ private slots:
     void on_penAlphaSpin_valueChanged(int arg1);
 
 private:
-    Ui::BrushPenSelection *ui;
-    CropScene *scene;
+    Ui::BrushPenSelection* ui;
+    CropScene* scene;
     QColor brush, pen;
 };
 

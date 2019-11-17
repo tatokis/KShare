@@ -6,13 +6,16 @@
 #include <formats.hpp>
 #include <notifications.hpp>
 
-void ClipboardUploader::doUpload(QByteArray imgData, QString format) {
+void ClipboardUploader::doUpload(QByteArray imgData, QString format)
+{
     auto f = formats::recordingFormatFromName(format);
-    if (f != formats::Recording::None) {
+    if (f != formats::Recording::None)
+    {
         auto data = new QMimeData();
         data->setData(formats::recordingFormatMIME(f), imgData);
         QApplication::clipboard()->setMimeData(data);
-    } else
+    }
+    else
         QApplication::clipboard()->setImage(QImage::fromData(imgData, format.toLocal8Bit().constData()));
     notifications::notify("KShare", tr("Copied to clipboard!"));
 }

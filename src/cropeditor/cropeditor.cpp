@@ -10,11 +10,12 @@
 #include <settings.hpp>
 #include <utils.hpp>
 
-CropEditor::CropEditor(QPixmap image, QObject *parent) : QObject(parent) {
+CropEditor::CropEditor(QPixmap image, QObject* parent) : QObject(parent)
+{
     scene = new CropScene(parent, image);
     view = new CropView(scene);
     view->raise();
-    QGraphicsPixmapItem *pixmapItem = new QGraphicsPixmapItem(image);
+    QGraphicsPixmapItem* pixmapItem = new QGraphicsPixmapItem(image);
     pixmapItem->setZValue(-1);
     scene->addItem(pixmapItem);
     scene->setSceneRect(image.rect());
@@ -32,12 +33,15 @@ CropEditor::CropEditor(QPixmap image, QObject *parent) : QObject(parent) {
     connect(scene, &CropScene::closedWithRect, this, &CropEditor::crop);
 }
 
-CropEditor::~CropEditor() {
+CropEditor::~CropEditor()
+{
     scene->deleteLater();
     view->deleteLater();
 }
 
-void CropEditor::crop(QRect rect) {
-    if (rect.isValid()) emit cropped(view->grab(rect));
+void CropEditor::crop(QRect rect)
+{
+    if (rect.isValid())
+        emit cropped(view->grab(rect));
     deleteLater();
 }

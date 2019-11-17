@@ -3,24 +3,27 @@
 
 #include <QImage>
 #include <QSize>
-extern "C" {
+extern "C"
+{
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 #include <libswscale/swscale.h>
 }
 
-struct OutputStream {
-    AVStream *st = NULL;
-    AVCodecContext *enc = NULL;
+struct OutputStream
+{
+    AVStream* st = NULL;
+    AVCodecContext* enc = NULL;
 
     int64_t nextPts = 0;
 
-    AVFrame *frame = NULL;
+    AVFrame* frame = NULL;
 
-    SwsContext *sws = NULL;
+    SwsContext* sws = NULL;
 };
 
-struct CodecSettings {
+struct CodecSettings
+{
     int bitrate;
     int gopSize;
     int bFrames;
@@ -30,19 +33,20 @@ struct CodecSettings {
     bool vp9Lossless;
 };
 
-class Encoder {
+class Encoder
+{
 public:
-    Encoder(QString &targetFile, QSize res, CodecSettings *settings = NULL);
+    Encoder(QString& targetFile, QSize res, CodecSettings* settings = NULL);
     ~Encoder();
     bool addFrame(QImage frm);
     bool isRunning();
     bool end();
 
 private:
-    AVCodec *codec = NULL;
+    AVCodec* codec = NULL;
 
-    OutputStream *out = new OutputStream;
-    AVFormatContext *fc = NULL;
+    OutputStream* out = new OutputStream;
+    AVFormatContext* fc = NULL;
 
     bool success = false;
     bool ended = false;

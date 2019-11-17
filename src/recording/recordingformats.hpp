@@ -12,7 +12,8 @@
 
 #include <recording/encoders/encoder.hpp>
 
-class RecordingFormats {
+class RecordingFormats
+{
     Q_DECLARE_TR_FUNCTIONS(RecordingFormats)
 public:
     RecordingFormats(formats::Recording f);
@@ -32,7 +33,7 @@ private:
     QImage::Format iFormat;
     QTemporaryDir tmpDir;
     QString path;
-    Encoder *enc = NULL;
+    Encoder* enc = NULL;
     bool interrupt = false;
     bool frameAdded = false;
     QString anotherFormat;

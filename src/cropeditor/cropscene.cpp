@@ -25,9 +25,10 @@
 #include <functional>
 #include <settings.hpp>
 
-CropScene::CropScene(QObject *parent, QPixmap pixmap)
+CropScene::CropScene(QObject* parent, QPixmap pixmap)
 : ScreenOverlay(pixmap, parent), drawingSelectionMaker([] { return nullptr; }), prevButtons(Qt::NoButton),
-  _brush(Qt::SolidPattern), _font(settings::settings().value("font", QFont()).value<QFont>()) {
+  _brush(Qt::SolidPattern), _font(settings::settings().value("font", QFont()).value<QFont>())
+{
     pen().setColor(settings::settings().value("penColor", pen().color()).value<QColor>());
     pen().setCosmetic(settings::settings().value("penCosmetic", pen().isCosmetic()).toBool());
     pen().setWidthF(settings::settings().value("penWidth", pen().widthF()).toReal());
@@ -48,13 +49,15 @@ CropScene::CropScene(QObject *parent, QPixmap pixmap)
 
     menu->addSeparator();
     addDrawingAction(menu, tr("Eraser"), ":/icons/erase.png", [] { return new EraserItem; });
-    QAction *clear = menu->addAction("");
+    QAction* clear = menu->addAction("");
     clear->setToolTip(tr("Clear all drawing"));
     clear->setIcon(QIcon(":/icons/delete.png"));
     connect(clear, &QAction::triggered, [&] {
         auto its = items();
-        for (auto i : its) {
-            if (i != polyItem && i != rect && i->zValue() != -1 && i != proxyMenu && i != hint && i->zValue() != 199) {
+        for (auto i : its)
+        {
+            if (i != polyItem && i != rect && i->zValue() != -1 && i != proxyMenu && i != hint && i->zValue() != 199)
+            {
                 removeItem(i);
             }
         }
@@ -63,7 +66,7 @@ CropScene::CropScene(QObject *parent, QPixmap pixmap)
     addDrawingAction(menu, tr("None"), ":/icons/crop.png", [] { return nullptr; });
 
     menu->addSeparator();
-    QAction *settings = menu->addAction("");
+    QAction* settings = menu->addAction("");
     settings->setToolTip(tr("Settings"));
     settings->setIcon(QIcon(":/icons/settings.png"));
     connect(settings, &QAction::triggered, [&] {
@@ -75,19 +78,19 @@ CropScene::CropScene(QObject *parent, QPixmap pixmap)
     display = menu->addAction(drawingName);
     display->setDisabled(true);
 
-    QAction *fonts = menu->addAction("");
+    QAction* fonts = menu->addAction("");
     fonts->setIcon(QIcon(":/icons/fontsettings.png"));
     connect(fonts, &QAction::triggered, this, &CropScene::fontAsk);
 
     menu->addAction(fonts);
     menu->addSeparator();
-    QAction *confirm = menu->addAction("");
+    QAction* confirm = menu->addAction("");
     confirm->setToolTip(tr("Confirm"));
     confirm->setIcon(QIcon(":/icons/accept.png"));
     connect(confirm, &QAction::triggered, [this] { done(true); });
     menu->addAction(confirm);
 
-    QAction *cancel = menu->addAction("");
+    QAction* cancel = menu->addAction("");
     cancel->setToolTip(tr("Cancel"));
     cancel->setIcon(QIcon(":/icons/cancel.png"));
     connect(cancel, &QAction::triggered, [this] { done(false); });
@@ -125,24 +128,30 @@ CropScene::CropScene(QObject *parent, QPixmap pixmap)
     });
 }
 
-CropScene::~CropScene() {
+CropScene::~CropScene()
+{
     delete drawingSelection;
 }
 
-QPen &CropScene::pen() {
+QPen& CropScene::pen()
+{
     return _pen;
 }
 
-QBrush &CropScene::brush() {
+QBrush& CropScene::brush()
+{
     return _brush;
 }
 
-QFont &CropScene::font() {
+QFont& CropScene::font()
+{
     return _font;
 }
 
-void CropScene::setDrawingSelection(QString name, std::function<DrawItem *()> drawAction) {
-    if (drawingSelection) {
+void CropScene::setDrawingSelection(QString name, std::function<DrawItem*()> drawAction)
+{
+    if (drawingSelection)
+    {
         delete drawingSelection;
         drawingSelection = 0;
     }
@@ -152,7 +161,8 @@ void CropScene::setDrawingSelection(QString name, std::function<DrawItem *()> dr
     drawingName = name;
     display->setText(drawingName);
     if (drawingSelection)
-        if (!drawingSelection->init(this)) setDrawingSelection(tr("None"), [] { return nullptr; });
+        if (!drawingSelection->init(this))
+            setDrawingSelection(tr("None"), [] { return nullptr; });
     menu->adjustSize();
     auto screen = QApplication::primaryScreen();
     int w = screen->geometry().width();
@@ -160,52 +170,75 @@ void CropScene::setDrawingSelection(QString name, std::function<DrawItem *()> dr
     QPoint(screen->geometry().x() + (w - proxyMenu->boundingRect().width()) / 2, screen->geometry().y() + 100)));
 }
 
-QGraphicsItem *CropScene::whichItem(QPointF scenePos) {
-    for (auto item : items()) {
+QGraphicsItem* CropScene::whichItem(QPointF scenePos)
+{
+    for (auto item : items())
+    {
         if (item->sceneBoundingRect().contains(scenePos))
-            if (item != polyItem && item != rect && item->zValue() != 199 && item->zValue() != -1) return item;
+            if (item != polyItem && item != rect && item->zValue() != 199 && item->zValue() != -1)
+                return item;
     }
     return nullptr;
 }
 
-void CropScene::fontAsk() {
+void CropScene::fontAsk()
+{
     hide();
     bool ok = false;
     QFont font = QFontDialog::getFont(&ok, this->font(), this->views()[0], "Font to use");
-    if (ok) _font = font;
+    if (ok)
+        _font = font;
     show();
 }
 
-void CropScene::mouseMoved(QGraphicsSceneMouseEvent *e, QPointF cursorPos, QPointF delta) {
+void CropScene::mouseMoved(QGraphicsSceneMouseEvent* e, QPointF cursorPos, QPointF delta)
+{
     hint->setVisible(settings::settings().value("crophint").toBool() && !hint->sceneBoundingRect().contains(cursorPos));
-    if (rect && !drawingRect) {
+    if (rect && !drawingRect)
+    {
         // qAbs(e->scenePos().<axis>() - rect->rect().<edge>()) < 10
         bool close = false;
         QRectF newRect = rect->rect();
-        if (qAbs(e->scenePos().x() - rect->rect().right()) < 10) {
-            if (qAbs(e->scenePos().y() - rect->rect().bottom()) < 10) {
+        if (qAbs(e->scenePos().x() - rect->rect().right()) < 10)
+        {
+            if (qAbs(e->scenePos().y() - rect->rect().bottom()) < 10)
+            {
                 close = true;
                 views()[0]->setCursor(Qt::SizeFDiagCursor);
-                if (e->buttons() & Qt::LeftButton) newRect.setBottomRight(cursorPos);
-            } else if (qAbs(e->scenePos().y() - rect->rect().top()) < 10) {
-                close = true;
-                views()[0]->setCursor(Qt::SizeBDiagCursor);
-                if (e->buttons() & Qt::LeftButton) newRect.setTopRight(cursorPos);
+                if (e->buttons() & Qt::LeftButton)
+                    newRect.setBottomRight(cursorPos);
             }
-        } else if (qAbs(e->scenePos().x() - rect->rect().left()) < 10) {
-            if (qAbs(e->scenePos().y() - rect->rect().top()) < 10) {
-                close = true;
-                views()[0]->setCursor(Qt::SizeFDiagCursor);
-                if (e->buttons() & Qt::LeftButton) newRect.setTopLeft(cursorPos);
-            } else if (qAbs(e->scenePos().y() - rect->rect().bottom()) < 10) {
+            else if (qAbs(e->scenePos().y() - rect->rect().top()) < 10)
+            {
                 close = true;
                 views()[0]->setCursor(Qt::SizeBDiagCursor);
-                if (e->buttons() & Qt::LeftButton) newRect.setBottomLeft(cursorPos);
+                if (e->buttons() & Qt::LeftButton)
+                    newRect.setTopRight(cursorPos);
             }
         }
-        if (!close) {
+        else if (qAbs(e->scenePos().x() - rect->rect().left()) < 10)
+        {
+            if (qAbs(e->scenePos().y() - rect->rect().top()) < 10)
+            {
+                close = true;
+                views()[0]->setCursor(Qt::SizeFDiagCursor);
+                if (e->buttons() & Qt::LeftButton)
+                    newRect.setTopLeft(cursorPos);
+            }
+            else if (qAbs(e->scenePos().y() - rect->rect().bottom()) < 10)
+            {
+                close = true;
+                views()[0]->setCursor(Qt::SizeBDiagCursor);
+                if (e->buttons() & Qt::LeftButton)
+                    newRect.setBottomLeft(cursorPos);
+            }
+        }
+        if (!close)
+        {
             views()[0]->setCursor(Qt::BlankCursor);
-        } else {
+        }
+        else
+        {
             rect->setRect(newRect);
             prevButtons = e->buttons();
             updatePoly();
@@ -214,19 +247,28 @@ void CropScene::mouseMoved(QGraphicsSceneMouseEvent *e, QPointF cursorPos, QPoin
     }
 
     auto buttons = e->buttons();
-    if (e->modifiers() & Qt::ControlModifier && buttons == Qt::LeftButton) {
+    if (e->modifiers() & Qt::ControlModifier && buttons == Qt::LeftButton)
+    {
         auto item = whichItem(cursorPos);
-        if (item) item->moveBy(delta.x(), delta.y());
+        if (item)
+            item->moveBy(delta.x(), delta.y());
         return;
     }
-    if (buttons == Qt::LeftButton) {
-        if (!proxyMenu->sceneBoundingRect().contains(cursorPos)) {
-            if (drawingSelection) {
+    if (buttons == Qt::LeftButton)
+    {
+        if (!proxyMenu->sceneBoundingRect().contains(cursorPos))
+        {
+            if (drawingSelection)
+            {
                 drawingSelection->mouseDragEvent(e, this);
-            } else {
+            }
+            else
+            {
                 QPointF p = cursorPos;
-                if (!drawingRect || rect == nullptr) {
-                    if (rect) {
+                if (!drawingRect || rect == nullptr)
+                {
+                    if (rect)
+                    {
                         delete rect;
                         rect = nullptr;
                     }
@@ -238,11 +280,16 @@ void CropScene::mouseMoved(QGraphicsSceneMouseEvent *e, QPointF cursorPos, QPoin
                     rect->setPen(pen);
                     rect->setZValue(1);
                     addItem(rect);
-                } else {
-                    if (prevButtons == Qt::NoButton && !keyboardActiveSelection()) {
+                }
+                else
+                {
+                    if (prevButtons == Qt::NoButton && !keyboardActiveSelection())
+                    {
                         initPos = p;
                         rect->setRect(p.x(), p.y(), 1, 1);
-                    } else {
+                    }
+                    else
+                    {
                         rect->setRect(QRect(qMin(initPos.x(), p.x()), qMin(initPos.y(), p.y()),
                                             qAbs(initPos.x() - p.x()), qAbs(initPos.y() - p.y())));
                     }
@@ -256,57 +303,71 @@ void CropScene::mouseMoved(QGraphicsSceneMouseEvent *e, QPointF cursorPos, QPoin
     setMagVisibility(!proxyMenu->sceneBoundingRect().contains(cursorPos));
 }
 
-void CropScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *e) {
+void CropScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
+{
     drawingRect = false;
-    if (drawingSelection) {
+    if (drawingSelection)
+    {
         drawingSelection->mouseDragEndEvent(e, this);
         setDrawingSelection(drawingName, drawingSelectionMaker);
-    } else if (!proxyMenu->sceneBoundingRect().contains(e->scenePos()) && settings::settings().value("quickMode", false).toBool()) {
+    }
+    else if (!proxyMenu->sceneBoundingRect().contains(e->scenePos()) && settings::settings().value("quickMode", false).toBool())
+    {
         done(true);
     }
     prevButtons = Qt::NoButton;
 
-    if (e->modifiers() & Qt::ControlModifier) e->accept();
+    if (e->modifiers() & Qt::ControlModifier)
+        e->accept();
     QGraphicsScene::mouseReleaseEvent(e);
 }
 
-void CropScene::mousePressEvent(QGraphicsSceneMouseEvent *e) {
-    if (e->modifiers() & Qt::AltModifier) {
+void CropScene::mousePressEvent(QGraphicsSceneMouseEvent* e)
+{
+    if (e->modifiers() & Qt::AltModifier)
+    {
         auto item = whichItem(cursorPos());
-        if (item && item != proxyMenu) removeItem(item);
+        if (item && item != proxyMenu)
+            removeItem(item);
     }
 
-    if (e->modifiers() & Qt::ControlModifier) e->accept();
+    if (e->modifiers() & Qt::ControlModifier)
+        e->accept();
     QGraphicsScene::mousePressEvent(e);
 }
 
-void CropScene::addDrawingAction(QMenuBar *menu, QString name, QString icon, std::function<DrawItem *()> item) {
-    QAction *action = menu->addAction("");
+void CropScene::addDrawingAction(QMenuBar* menu, QString name, QString icon, std::function<DrawItem*()> item)
+{
+    QAction* action = menu->addAction("");
     action->setToolTip(name);
     action->setIcon(QIcon(icon));
     connect(action, &QAction::triggered, [this, item, name](bool) { setDrawingSelection(name, item); });
 }
 
-void CropScene::keyReleaseEvent(QKeyEvent *event) {
+void CropScene::keyReleaseEvent(QKeyEvent* event)
+{
     if (((event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) && !drawingSelection) || event->key() == Qt::Key_Escape)
         done(event->key() != Qt::Key_Escape);
-    else if (event->key() == Qt::Key_F1) {
+    else if (event->key() == Qt::Key_F1)
+    {
         bool enabled = !settings::settings().value("crophint", true).toBool();
         hint->setVisible(enabled);
         settings::settings().setValue("crophint", enabled);
     }
 
-    if (event->modifiers() & Qt::ControlModifier) event->accept();
+    if (event->modifiers() & Qt::ControlModifier)
+        event->accept();
 }
 
-void CropScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e)
+void CropScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* e)
 {
     e->accept();
     done(true);
 }
 
 
-void CropScene::updatePoly() {
+void CropScene::updatePoly()
+{
     QPolygonF poly;
     QPointF theMagicWikipediaPoint(rect->rect().right(), sceneRect().bottom());
     poly << sceneRect().topLeft();
@@ -325,21 +386,26 @@ void CropScene::updatePoly() {
     this->polyItem->setPolygon(poly);
 }
 
-void CropScene::done(bool notEsc) {
-    if (notEsc && rect) {
+void CropScene::done(bool notEsc)
+{
+    if (notEsc && rect)
+    {
         QRectF rect2 = rect->rect();
         hint->setVisible(false);
         rect->setRect(QRect(-100, -100, 0, 0));
         proxyMenu->setVisible(false);
         hideMag();
         emit closedWithRect(rect2.toRect());
-    } else
+    }
+    else
         emit closedWithRect(QRect());
 }
 
-QString CropScene::generateHint() {
+QString CropScene::generateHint()
+{
     QString rectStr("(-1, -1, 0, 0)");
-    if (rect) {
+    if (rect)
+    {
         rectStr = "(%0, %1, %2, %3)";
         rectStr = rectStr.arg(qRound(rect->rect().x()))
                   .arg(qRound(rect->rect().y()))

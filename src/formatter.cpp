@@ -1,10 +1,10 @@
 #include "formatter.hpp"
 
-#include <QDateTime>
-#include <QStringList>
-#include <QRegularExpression>
-#include <QRegExp>
 #include "utils.hpp"
+#include <QDateTime>
+#include <QRegExp>
+#include <QRegularExpression>
+#include <QStringList>
 
 QString formatter::format(QString toFormat, QString ext, QMap<QString, QString> variables)
 {
@@ -23,20 +23,21 @@ QString formatter::format(QString toFormat, QString ext, QMap<QString, QString> 
 
     bool ok = false;
     int random_len = 0;
-    if(randomTexts.length() == 2)
+    if (randomTexts.length() == 2)
         random_len = randomTexts.at(1).toInt(&ok);
 
     // If the only argument was successfully parsed as a uint, then we can replace it with random chars
     // Otherwise, fall back to picking a random word from the match
-    if(ok)
+    if (ok)
     {
-        if(random_len < 1)
+        if (random_len < 1)
             random_len = 10;
         formatted = formatted.replace(randomTexts.at(0), utils::randomString(random_len));
     }
     else
     {
-        for (int i = 0; i < randomTexts.length(); i += 2) {
+        for (int i = 0; i < randomTexts.length(); i += 2)
+        {
             QStringList list = randomTexts.at(i + 1).split('|');
             formatted = formatted.replace(randomTexts.at(i), list.at(rand() % (list.length())));
         }

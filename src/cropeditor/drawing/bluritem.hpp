@@ -5,23 +5,26 @@
 
 #include <QGraphicsEffect>
 
-class BlurItem : public DrawItem {
+class BlurItem : public DrawItem
+{
 public:
-    QString name() override {
+    QString name() override
+    {
         return "Blur";
     }
-    ~BlurItem() {
+    ~BlurItem()
+    {
     }
 
-    bool init(CropScene *) override;
-    void mouseDragEvent(QGraphicsSceneMouseEvent *, CropScene *scene) override;
-    void mouseDragEndEvent(QGraphicsSceneMouseEvent *, CropScene *) override;
+    bool init(CropScene*) override;
+    void mouseDragEvent(QGraphicsSceneMouseEvent*, CropScene* scene) override;
+    void mouseDragEndEvent(QGraphicsSceneMouseEvent*, CropScene*) override;
 
 private:
-    QGraphicsBlurEffect *effect;
+    QGraphicsBlurEffect* effect;
     QPointF pos;
-    QGraphicsRectItem *rect = 0;
-    QGraphicsPixmapItem *pixmap;
+    QGraphicsRectItem* rect = 0;
+    QGraphicsPixmapItem* pixmap;
 };
 
 #endif // BLURITEM_HPP

@@ -1,7 +1,7 @@
 #include "requestlogging.hpp"
 #include <QDateTime>
-#include <mainwindow.hpp>
 #include <io/ioutils.hpp>
+#include <mainwindow.hpp>
 #include <utils.hpp>
 
 // $type $url $status $time
@@ -14,18 +14,22 @@ QDir responses(settings::dir().absoluteFilePath("responses"));
 QString requestPath = settings::dir().absoluteFilePath("history");
 
 
-void requestlogging::addEntry(RequestContext context) {
-    if (!responses.exists()) responses.mkpath(".");
+void requestlogging::addEntry(RequestContext context)
+{
+    if (!responses.exists())
+        responses.mkpath(".");
     QString timeNow = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd HH-mm-ss-zzz");
     QFile responseFile(responses.absoluteFilePath(timeNow));
     QFile requestFile(requestPath);
 
-    if (!responseFile.open(QIODevice::WriteOnly)) {
+    if (!responseFile.open(QIODevice::WriteOnly))
+    {
         qCritical().noquote() << "Could not save response! " + responseFile.errorString();
         return;
     }
 
-    if (!requestFile.open(QIODevice::Append)) {
+    if (!requestFile.open(QIODevice::Append))
+    {
         qCritical().noquote() << "Could not append request! " + responseFile.errorString();
         return;
     }
@@ -45,14 +49,17 @@ void requestlogging::addEntry(RequestContext context) {
 
 using requestlogging::LoggedRequest;
 
-QList<LoggedRequest> requestlogging::getRequests() {
+QList<LoggedRequest> requestlogging::getRequests()
+{
     QList<LoggedRequest> ret;
 
     QFile requestFile(requestPath);
-    if (!requestFile.exists() || !requestFile.open(QIODevice::ReadOnly)) return ret;
+    if (!requestFile.exists() || !requestFile.open(QIODevice::ReadOnly))
+        return ret;
 
     QByteArray line;
-    while ((line = requestFile.readLine()).size() != 0) {
+    while ((line = requestFile.readLine()).size() != 0)
+    {
         LoggedRequest r;
         QTextStream stream(&line);
         stream >> r.type;
@@ -66,6 +73,7 @@ QList<LoggedRequest> requestlogging::getRequests() {
     return ret;
 }
 
-void requestlogging::indicator::show(int count) {
+void requestlogging::indicator::show(int count)
+{
     MainWindow::inst()->setTrayIcon(utils::getTrayIcon(count));
 }

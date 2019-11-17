@@ -8,18 +8,19 @@
 #include <QObject>
 #include <QPixmap>
 
-class CropEditor : public QObject {
+class CropEditor : public QObject
+{
     Q_OBJECT
 public:
-    CropEditor(QPixmap image, QObject *parent = 0);
+    CropEditor(QPixmap image, QObject* parent = 0);
     ~CropEditor();
 signals:
-    QPixmap *cropped(QPixmap pixmap);
+    QPixmap* cropped(QPixmap pixmap);
 
 private:
     void crop(QRect rect);
-    CropScene *scene = nullptr;
-    CropView *view = nullptr;
+    CropScene* scene = nullptr;
+    CropView* view = nullptr;
 };
 
 #endif // CROPEDITOR_HPP

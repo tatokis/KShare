@@ -4,20 +4,24 @@
 #include "drawitem.hpp"
 
 
-class ArrowItem : public DrawItem {
+class ArrowItem : public DrawItem
+{
 public:
-    ArrowItem() {
+    ArrowItem()
+    {
     }
-    QString name() override {
+    QString name() override
+    {
         return "Arrow";
     }
-    void mouseDragEvent(QGraphicsSceneMouseEvent *, CropScene *scene) override;
-    void mouseDragEndEvent(QGraphicsSceneMouseEvent *, CropScene *) override {
+    void mouseDragEvent(QGraphicsSceneMouseEvent*, CropScene* scene) override;
+    void mouseDragEndEvent(QGraphicsSceneMouseEvent*, CropScene*) override
+    {
     }
 
 private:
-    QGraphicsLineItem *line;
-    QGraphicsPathItem *head;
+    QGraphicsLineItem* line;
+    QGraphicsPathItem* head;
     QPointF init;
 };
 

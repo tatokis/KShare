@@ -3,21 +3,26 @@
 
 #include "drawitem.hpp"
 
-class EllipseItem : public DrawItem {
+class EllipseItem : public DrawItem
+{
 public:
-    EllipseItem() {
+    EllipseItem()
+    {
     }
-    QString name() override {
+    QString name() override
+    {
         return "Blur";
     }
-    ~EllipseItem() {
+    ~EllipseItem()
+    {
     }
-    void mouseDragEvent(QGraphicsSceneMouseEvent *, CropScene *scene) override;
-    void mouseDragEndEvent(QGraphicsSceneMouseEvent *, CropScene *) override {
+    void mouseDragEvent(QGraphicsSceneMouseEvent*, CropScene* scene) override;
+    void mouseDragEndEvent(QGraphicsSceneMouseEvent*, CropScene*) override
+    {
     }
 
 private:
-    QGraphicsEllipseItem *ellie = nullptr;
+    QGraphicsEllipseItem* ellie = nullptr;
     QPointF initPos;
 };
 

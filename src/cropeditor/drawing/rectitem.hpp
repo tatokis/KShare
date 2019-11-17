@@ -3,18 +3,20 @@
 
 #include "drawitem.hpp"
 
-class RectItem : public DrawItem {
+class RectItem : public DrawItem
+{
 public:
     RectItem();
     ~RectItem();
-    QString name() override {
+    QString name() override
+    {
         return "Rectangle";
     }
-    void mouseDragEvent(QGraphicsSceneMouseEvent *, CropScene *scene) override;
-    void mouseDragEndEvent(QGraphicsSceneMouseEvent *, CropScene *) override;
+    void mouseDragEvent(QGraphicsSceneMouseEvent*, CropScene* scene) override;
+    void mouseDragEndEvent(QGraphicsSceneMouseEvent*, CropScene*) override;
 
 private:
-    QGraphicsRectItem *rect = nullptr;
+    QGraphicsRectItem* rect = nullptr;
     QPointF initPos;
 };
 

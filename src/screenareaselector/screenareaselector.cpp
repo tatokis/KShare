@@ -8,7 +8,8 @@
 
 static QString hintPattern(ScreenAreaSelector::tr("Set the recording region by resizing this.\n%1x%2"));
 
-ScreenAreaSelector::ScreenAreaSelector() {
+ScreenAreaSelector::ScreenAreaSelector()
+{
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
@@ -17,7 +18,8 @@ ScreenAreaSelector::ScreenAreaSelector() {
     setAutoFillBackground(true);
     QTimer::singleShot(0, [&] {
         QVariant val = settings::settings().value("screenareaselector/rect");
-        if (val.canConvert<QRect>()) {
+        if (val.canConvert<QRect>())
+        {
             QRect rect = val.value<QRect>();
             resize(rect.size());
             move(rect.topLeft());
@@ -31,25 +33,31 @@ ScreenAreaSelector::ScreenAreaSelector() {
     layout()->addWidget(hintLabel);
 }
 
-ScreenAreaSelector::~ScreenAreaSelector() {
+ScreenAreaSelector::~ScreenAreaSelector()
+{
     delete hintLabel;
 }
 
-void ScreenAreaSelector::keyPressEvent(QKeyEvent *event) {
+void ScreenAreaSelector::keyPressEvent(QKeyEvent* event)
+{
     event->accept();
-    if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
+    if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
+    {
         QRect r = QRect(mapToGlobal(QPoint(0, 0)), rect().size());
         emit selectedArea(r);
         close();
-    } else if (event->key() == Qt::Key_Escape)
+    }
+    else if (event->key() == Qt::Key_Escape)
         close();
 }
 
-void ScreenAreaSelector::resizeEvent(QResizeEvent *) {
+void ScreenAreaSelector::resizeEvent(QResizeEvent*)
+{
     hintLabel->setText(hintPattern.arg(QString::number(width()), QString::number(height())));
 }
 
-void ScreenAreaSelector::closeEvent(QCloseEvent *) {
+void ScreenAreaSelector::closeEvent(QCloseEvent*)
+{
     QRect r = QRect(mapToGlobal(QPoint(0, 0)), rect().size());
     settings::settings().setValue("screenareaselector/rect", r);
 }

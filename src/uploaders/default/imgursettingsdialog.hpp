@@ -3,15 +3,17 @@
 
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
     class ImgurSettingsDialog;
 }
 
-class ImgurSettingsDialog : public QDialog {
+class ImgurSettingsDialog : public QDialog
+{
     Q_OBJECT
 
 public:
-    explicit ImgurSettingsDialog(QWidget *parent = 0);
+    explicit ImgurSettingsDialog(QWidget* parent = 0);
     ~ImgurSettingsDialog();
 
 private slots:
@@ -20,7 +22,7 @@ private slots:
     void on_authorize_clicked();
 
 private:
-    Ui::ImgurSettingsDialog *ui;
+    Ui::ImgurSettingsDialog* ui;
 };
 
 #endif // IMGURSETTINGSDIALOG_HPP

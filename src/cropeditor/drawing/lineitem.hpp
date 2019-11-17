@@ -3,18 +3,20 @@
 
 #include "drawitem.hpp"
 
-class LineItem : public DrawItem {
+class LineItem : public DrawItem
+{
 public:
     LineItem();
-    QString name() override {
+    QString name() override
+    {
         return "Straight line";
     }
-    void mouseDragEvent(QGraphicsSceneMouseEvent *, CropScene *scene) override;
-    void mouseDragEndEvent(QGraphicsSceneMouseEvent *, CropScene *) override;
+    void mouseDragEvent(QGraphicsSceneMouseEvent*, CropScene* scene) override;
+    void mouseDragEndEvent(QGraphicsSceneMouseEvent*, CropScene*) override;
 
 private:
     QPointF init;
-    QGraphicsLineItem *line;
+    QGraphicsLineItem* line;
 };
 
 #endif // LINEITEM_HPP

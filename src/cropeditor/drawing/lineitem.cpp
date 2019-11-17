@@ -1,16 +1,22 @@
 #include "lineitem.hpp"
 
-LineItem::LineItem() {
+LineItem::LineItem()
+{
 }
 
-void LineItem::mouseDragEvent(QGraphicsSceneMouseEvent *, CropScene *scene) {
-    if (init.isNull()) {
+void LineItem::mouseDragEvent(QGraphicsSceneMouseEvent*, CropScene* scene)
+{
+    if (init.isNull())
+    {
         init = scene->cursorPos();
         line = scene->addLine(QLineF(init, init), scene->pen());
-    } else {
+    }
+    else
+    {
         line->setLine(QLineF(init, scene->cursorPos()));
     }
 }
 
-void LineItem::mouseDragEndEvent(QGraphicsSceneMouseEvent *, CropScene *) {
+void LineItem::mouseDragEndEvent(QGraphicsSceneMouseEvent*, CropScene*)
+{
 }

@@ -7,17 +7,23 @@
 #include <QGraphicsView>
 #include <QMetaType>
 
-class ScreenOverlay : public QGraphicsScene {
+class ScreenOverlay : public QGraphicsScene
+{
     Q_OBJECT
 public:
-    enum MovementPattern { MP_JKL, MP_HJKL, MP_ARROWS };
+    enum MovementPattern
+    {
+        MP_JKL,
+        MP_HJKL,
+        MP_ARROWS
+    };
 
-    explicit ScreenOverlay(QPixmap pixmap, QObject *parent = 0);
+    explicit ScreenOverlay(QPixmap pixmap, QObject* parent = 0);
 
     MovementPattern movementPattern();
     void setMovementPattern(MovementPattern nmp);
 
-    QPixmap &pixmap();
+    QPixmap& pixmap();
     void updateMagnifierGrid();
     QColor highlight();
     void setHighlight(QColor highlight);
@@ -42,30 +48,34 @@ public slots:
 
 protected:
     bool keyboardActiveSelection();
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *e) override;
-    void wheelEvent(QGraphicsSceneWheelEvent *e) override;
-    void keyPressEvent(QKeyEvent *e) override;
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent *e) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent* e) override;
+    void wheelEvent(QGraphicsSceneWheelEvent* e) override;
+    void keyPressEvent(QKeyEvent* e) override;
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent* e) override;
 
-    virtual void mouseMoved(QGraphicsSceneMouseEvent *, QPointF, QPointF) {
+    virtual void mouseMoved(QGraphicsSceneMouseEvent*, QPointF, QPointF)
+    {
     }
-    virtual void highlightChanged(QColor) {
+    virtual void highlightChanged(QColor)
+    {
     }
-    virtual QString generateHint() {
+    virtual QString generateHint()
+    {
         return QString();
     }
-    virtual void customizeContextMenu(QGraphicsSceneContextMenuEvent *, QMenu *) {
+    virtual void customizeContextMenu(QGraphicsSceneContextMenuEvent*, QMenu*)
+    {
     }
 
 private:
     QPointF _cursorPos = QPoint(0, 0);
-    QGraphicsPixmapItem *magnifier = nullptr;
-    QGraphicsRectItem *magnifierBox = nullptr;
-    QGraphicsTextItem *magnifierHint = nullptr;
-    QGraphicsRectItem *magnifierHintBox = nullptr;
-    QGraphicsPolygonItem *cursorItem = nullptr;
-    QList<QGraphicsRectItem *> gridRectsX;
-    QList<QGraphicsRectItem *> gridRectsY;
+    QGraphicsPixmapItem* magnifier = nullptr;
+    QGraphicsRectItem* magnifierBox = nullptr;
+    QGraphicsTextItem* magnifierHint = nullptr;
+    QGraphicsRectItem* magnifierHintBox = nullptr;
+    QGraphicsPolygonItem* cursorItem = nullptr;
+    QList<QGraphicsRectItem*> gridRectsX;
+    QList<QGraphicsRectItem*> gridRectsY;
     QColor _highlight = Qt::cyan, _foreground = Qt::white;
     bool _grid = true;
     bool selectActive = false;

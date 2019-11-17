@@ -4,14 +4,17 @@
 #include <QPixmap>
 #include <QString>
 
-class Uploader {
+class Uploader
+{
 public:
     virtual void doUpload(QByteArray imgData, QString format) = 0;
     virtual QString name() = 0;
     virtual QString description() = 0;
-    virtual void showSettings() {
+    virtual void showSettings()
+    {
     }
-    virtual bool validate() {
+    virtual bool validate()
+    {
         return true;
     }
 };

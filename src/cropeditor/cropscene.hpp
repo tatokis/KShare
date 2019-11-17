@@ -17,22 +17,25 @@ class CropScene;
 
 #include <cropeditor/drawing/drawitem.hpp>
 
-class CropScene : public ScreenOverlay {
+class CropScene : public ScreenOverlay
+{
     Q_OBJECT
 public:
-    CropScene(QObject *parent, QPixmap pixmap);
+    CropScene(QObject* parent, QPixmap pixmap);
     ~CropScene();
-    QPen &pen();
-    QBrush &brush();
-    QFont &font();
-    void setDrawingSelection(QString name, std::function<DrawItem *()> drawAction);
-    QGraphicsPolygonItem *polyItm() {
+    QPen& pen();
+    QBrush& brush();
+    QFont& font();
+    void setDrawingSelection(QString name, std::function<DrawItem*()> drawAction);
+    QGraphicsPolygonItem* polyItm()
+    {
         return polyItem;
     }
-    QGraphicsRectItem *selRect() {
+    QGraphicsRectItem* selRect()
+    {
         return rect;
     }
-    QGraphicsItem *whichItem(QPointF scenePos);
+    QGraphicsItem* whichItem(QPointF scenePos);
     void setVisible(bool visible);
 
 public slots:
@@ -42,11 +45,11 @@ signals:
     void closedWithRect(QRect rect);
 
 protected:
-    void mouseMoved(QGraphicsSceneMouseEvent *e, QPointF cursorPos, QPointF delta) override;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *e) override;
-    void mousePressEvent(QGraphicsSceneMouseEvent *e) override;
-    void keyReleaseEvent(QKeyEvent *e) override;
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e) override;
+    void mouseMoved(QGraphicsSceneMouseEvent* e, QPointF cursorPos, QPointF delta) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent* e) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent* e) override;
+    void keyReleaseEvent(QKeyEvent* e) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* e) override;
     QString generateHint() override;
 
 private slots:
@@ -54,22 +57,22 @@ private slots:
 
 private:
     void updatePoly();
-    void addDrawingAction(QMenuBar *menu, QString name, QString icon, std::function<DrawItem *()> item);
-    std::function<DrawItem *()> drawingSelectionMaker;
+    void addDrawingAction(QMenuBar* menu, QString name, QString icon, std::function<DrawItem*()> item);
+    std::function<DrawItem*()> drawingSelectionMaker;
     QFlags<Qt::MouseButton> prevButtons;
-    QGraphicsRectItem *rect = nullptr;
+    QGraphicsRectItem* rect = nullptr;
     bool drawingRect = true;
     QPointF initPos;
     QPen _pen;
     QBrush _brush;
     QFont _font;
-    QGraphicsPolygonItem *polyItem = nullptr;
-    DrawItem *drawingSelection = nullptr;
-    QMenuBar *menu = nullptr;
-    QGraphicsProxyWidget *proxyMenu = nullptr;
+    QGraphicsPolygonItem* polyItem = nullptr;
+    DrawItem* drawingSelection = nullptr;
+    QMenuBar* menu = nullptr;
+    QGraphicsProxyWidget* proxyMenu = nullptr;
     QString drawingName = "None";
-    QAction *display;
-    QGraphicsPixmapItem *hint
+    QAction* display;
+    QGraphicsPixmapItem* hint
     = new QGraphicsPixmapItem(utils::renderText(tr( //
                                                 "Press F1 to toggle this hint\n"
                                                 "\tHold Shift to slow the cursor down\n"

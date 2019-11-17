@@ -11,28 +11,34 @@
 #include <io/ioutils.hpp>
 #include <settings.hpp>
 
-ImgurSettingsDialog::ImgurSettingsDialog(QWidget *parent) : QDialog(parent), ui(new Ui::ImgurSettingsDialog) {
+ImgurSettingsDialog::ImgurSettingsDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ImgurSettingsDialog)
+{
     ui->setupUi(this);
     connect(this, &ImgurSettingsDialog::accepted, this, &ImgurSettingsDialog::deleteLater);
     ui->clientId->setText(settings::settings().value("imgur/cid").toString());
     ui->clientSecret->setText(settings::settings().value("imgur/csecret").toString());
 }
 
-ImgurSettingsDialog::~ImgurSettingsDialog() {
+ImgurSettingsDialog::~ImgurSettingsDialog()
+{
     delete ui;
 }
 
-void ImgurSettingsDialog::on_addApp_clicked() {
+void ImgurSettingsDialog::on_addApp_clicked()
+{
     QDesktopServices::openUrl(QUrl("https://api.imgur.com/oauth2/addclient"));
 }
 
-void ImgurSettingsDialog::on_getPin_clicked() {
+void ImgurSettingsDialog::on_getPin_clicked()
+{
     QDesktopServices::openUrl(
     QUrl(QString("https://api.imgur.com/oauth2/authorize?client_id=%1&response_type=pin").arg(ui->clientId->text())));
 }
 
-void ImgurSettingsDialog::on_authorize_clicked() {
-    if (ui->pin->text().isEmpty() || ui->clientId->text().isEmpty() || ui->clientSecret->text().isEmpty()) return;
+void ImgurSettingsDialog::on_authorize_clicked()
+{
+    if (ui->pin->text().isEmpty() || ui->clientId->text().isEmpty() || ui->clientSecret->text().isEmpty())
+        return;
     ui->buttonBox->setEnabled(false);
     QJsonObject object;
     object.insert("client_id", ui->clientId->text());
@@ -45,13 +51,15 @@ void ImgurSettingsDialog::on_authorize_clicked() {
     ioutils::postJson(QUrl("https://api.imgur.com/oauth2/token"),
                       QList<QPair<QString, QString>>({ QPair<QString, QString>("Content-Type", "applicaton/json") }),
                       QJsonDocument::fromVariant(object.toVariantMap()).toJson(),
-                      [&](QJsonDocument response, QByteArray, QNetworkReply *r) {
-                          if (r->error() != QNetworkReply::NoError || !response.isObject()) {
+                      [&](QJsonDocument response, QByteArray, QNetworkReply* r) {
+                          if (r->error() != QNetworkReply::NoError || !response.isObject())
+                          {
                               ui->buttonBox->setEnabled(true);
                               return;
                           }
                           QJsonObject res = response.object();
-                          if (res.value("success").toBool()) {
+                          if (res.value("success").toBool())
+                          {
                               ui->buttonBox->setEnabled(true);
                               return;
                           }

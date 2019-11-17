@@ -4,20 +4,25 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsView>
 
-SelectionRectangle::SelectionRectangle() {
+SelectionRectangle::SelectionRectangle()
+{
 }
 
-SelectionRectangle::SelectionRectangle(qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent)
-: QGraphicsRectItem(x, y, w, h, parent) {
+SelectionRectangle::SelectionRectangle(qreal x, qreal y, qreal w, qreal h, QGraphicsItem* parent)
+: QGraphicsRectItem(x, y, w, h, parent)
+{
 }
 
-SelectionRectangle::SelectionRectangle(QRectF rect, QGraphicsItem *parent)
-: SelectionRectangle(rect.left(), rect.top(), rect.width(), rect.height(), parent) {
+SelectionRectangle::SelectionRectangle(QRectF rect, QGraphicsItem* parent)
+: SelectionRectangle(rect.left(), rect.top(), rect.width(), rect.height(), parent)
+{
 }
 
-void SelectionRectangle::paint(QPainter *painter, const QStyleOptionGraphicsItem *options, QWidget *widget) {
+void SelectionRectangle::paint(QPainter* painter, const QStyleOptionGraphicsItem* options, QWidget* widget)
+{
     QRect rect = this->rect().toRect();
-    if (rect.height() > 30 && rect.width() > 30) {
+    if (rect.height() > 30 && rect.width() > 30)
+    {
         painter->setPen(Qt::NoPen);
         painter->setBrush(pen().color());
 

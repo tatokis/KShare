@@ -6,7 +6,8 @@
 #include <QDialogButtonBox>
 #include <QSpinBox>
 
-EncoderSettingsDialog::EncoderSettingsDialog(QWidget *parent) : QDialog(parent), ui(new Ui::EncoderSettingsDialog) {
+EncoderSettingsDialog::EncoderSettingsDialog(QWidget* parent) : QDialog(parent), ui(new Ui::EncoderSettingsDialog)
+{
     ui->setupUi(this);
     setWindowTitle(tr("KShare Encoder Settings"));
     connect(ui->buttonBox, &QDialogButtonBox::accepted, [&] {
@@ -19,10 +20,12 @@ EncoderSettingsDialog::EncoderSettingsDialog(QWidget *parent) : QDialog(parent),
     });
 }
 
-EncoderSettingsDialog::~EncoderSettingsDialog() {
+EncoderSettingsDialog::~EncoderSettingsDialog()
+{
     delete ui;
 }
 
-void EncoderSettingsDialog::on_defaultImageQuality_clicked(bool checked) {
+void EncoderSettingsDialog::on_defaultImageQuality_clicked(bool checked)
+{
     ui->imageQuality->setEnabled(!checked);
 }

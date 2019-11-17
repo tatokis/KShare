@@ -11,13 +11,15 @@
 #include <screenoverlay/screenoverlayview.hpp>
 #include <utils.hpp>
 
-class ColorPickerScene : public ScreenOverlay, public ScreenOverlayView {
+class ColorPickerScene : public ScreenOverlay, public ScreenOverlayView
+{
     Q_DECLARE_TR_FUNCTIONS(ColorPickerScene)
 public:
-    ColorPickerScene(QPixmap pixmap, QWidget *parent = nullptr);
-    void keyPressEvent(QKeyEvent *event) override;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *) override;
-    static void showPicker() {
+    ColorPickerScene(QPixmap pixmap, QWidget* parent = nullptr);
+    void keyPressEvent(QKeyEvent* event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
+    static void showPicker()
+    {
         new ColorPickerScene(utils::fullscreen());
     }
 

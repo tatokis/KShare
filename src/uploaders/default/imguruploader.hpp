@@ -4,15 +4,18 @@
 #include "../uploader.hpp"
 #include <QApplication>
 
-class ImgurUploader : public Uploader {
+class ImgurUploader : public Uploader
+{
     Q_DECLARE_TR_FUNCTIONS(ImgurUploader)
     friend struct SegfaultWorkaround;
 
 public:
-    QString name() override {
+    QString name() override
+    {
         return "imgur";
     }
-    QString description() override {
+    QString description() override
+    {
         return "imgur.com uploader";
     }
     void doUpload(QByteArray byteArray, QString) override;

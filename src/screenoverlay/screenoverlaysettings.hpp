@@ -4,15 +4,17 @@
 #include "screenoverlay.hpp"
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
     class ScreenOverlaySettings;
 }
 
-class ScreenOverlaySettings : public QDialog {
+class ScreenOverlaySettings : public QDialog
+{
     Q_OBJECT
 
 public:
-    explicit ScreenOverlaySettings(ScreenOverlay *overlay, QWidget *parent = 0);
+    explicit ScreenOverlaySettings(ScreenOverlay* overlay, QWidget* parent = 0);
     ~ScreenOverlaySettings();
 
 private slots:
@@ -21,9 +23,9 @@ private slots:
     void on_fgColor_pressed();
 
 private:
-    Ui::ScreenOverlaySettings *ui;
+    Ui::ScreenOverlaySettings* ui;
     QColor fg, highlight;
-    ScreenOverlay *overlay;
+    ScreenOverlay* overlay;
 };
 
 #endif // SCREENOVERLAYSETTINGS_H

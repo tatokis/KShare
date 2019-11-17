@@ -4,14 +4,17 @@
 
 #define SETTINGS_FIELD(f, n, d, t) f = settings::settings().value(n, d).value<t>();
 #define SETTINGS_INTERFACE(F, t)                                                                                       \
-    t EncoderSettings::get##F() {                                                                                      \
+    t EncoderSettings::get##F()                                                                                        \
+    {                                                                                                                  \
         return F;                                                                                                      \
     }                                                                                                                  \
-    void EncoderSettings::set##F(t newf) {                                                                             \
+    void EncoderSettings::set##F(t newf)                                                                               \
+    {                                                                                                                  \
         F = newf;                                                                                                      \
     }
 
-EncoderSettings::EncoderSettings() {
+EncoderSettings::EncoderSettings()
+{
     SETTINGS_FIELD(bitrate, "codec/bitrate", 400000, int);
     SETTINGS_FIELD(gopSize, "codec/gopsize", 12, int);
     SETTINGS_FIELD(h264Profile, "codec/h264Profile", "medium", QString);
@@ -27,14 +30,16 @@ SETTINGS_INTERFACE(h264Crf, int)
 SETTINGS_INTERFACE(vp9Lossless, int)
 SETTINGS_INTERFACE(imageQuality, int)
 
-EncoderSettings EncoderSettings::inst() {
+EncoderSettings EncoderSettings::inst()
+{
     static EncoderSettings e;
     return e;
 }
 
 #define SETTINGS_S_S(se) s->se = se;
 
-CodecSettings *EncoderSettings::getSettings() {
+CodecSettings* EncoderSettings::getSettings()
+{
     auto s = new CodecSettings;
     SETTINGS_S_S(bitrate)
     SETTINGS_S_S(gopSize)

@@ -16,8 +16,10 @@
 
 #include <recording/encoders/encodersettings.hpp>
 
-RecordingFormats::RecordingFormats(formats::Recording f) {
-    if (!tmpDir.isValid()) {
+RecordingFormats::RecordingFormats(formats::Recording f)
+{
+    if (!tmpDir.isValid())
+    {
         validator = [](QSize) { return false; };
         logger::fatal(tr("Could not create temporary directory. Error: ") + tmpDir.errorString());
         return;
@@ -29,16 +31,21 @@ RecordingFormats::RecordingFormats(formats::Recording f) {
         return QFile(path).size() > 0 ? path : QString();
     };
     validator = [&](QSize s) {
-        if (!enc) {
-            try {
+        if (!enc)
+        {
+            try
+            {
                 auto es = EncoderSettings::inst().getSettings();
                 enc = new Encoder(path, s, es);
                 delete es;
-                if (!enc->isRunning()) {
+                if (!enc->isRunning())
+                {
                     delete enc;
                     return false;
                 }
-            } catch (std::runtime_error &e) {
+            }
+            catch (std::runtime_error& e)
+            {
                 logger::fatal(tr("Encoder error: ") + e.what());
                 interrupt = true;
                 delete enc;
@@ -48,10 +55,14 @@ RecordingFormats::RecordingFormats(formats::Recording f) {
         return !interrupt;
     };
     consumer = [&](QImage img) {
-        if (!interrupt) try {
+        if (!interrupt)
+            try
+            {
                 frameAdded = true;
                 enc->addFrame(img);
-            } catch (std::runtime_error &e) {
+            }
+            catch (std::runtime_error& e)
+            {
                 logger::fatal(tr("Encoder error: ") + e.what());
                 interrupt = true;
             }
@@ -60,26 +71,32 @@ RecordingFormats::RecordingFormats(formats::Recording f) {
     anotherFormat = formats::recordingFormatName(f);
 }
 
-std::function<void(QImage)> RecordingFormats::getConsumer() {
+std::function<void(QImage)> RecordingFormats::getConsumer()
+{
     return consumer;
 }
 
-std::function<QString()> RecordingFormats::getFinalizer() {
+std::function<QString()> RecordingFormats::getFinalizer()
+{
     return finalizer;
 }
 
-std::function<void()> RecordingFormats::getPostUploadTask() {
+std::function<void()> RecordingFormats::getPostUploadTask()
+{
     return postUploadTask;
 }
 
-std::function<bool(QSize)> RecordingFormats::getValidator() {
+std::function<bool(QSize)> RecordingFormats::getValidator()
+{
     return validator;
 }
 
-QImage::Format RecordingFormats::getFormat() {
+QImage::Format RecordingFormats::getFormat()
+{
     return iFormat;
 }
 
-QString RecordingFormats::getAnotherFormat() {
+QString RecordingFormats::getAnotherFormat()
+{
     return anotherFormat;
 }

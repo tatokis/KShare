@@ -7,11 +7,21 @@
 #include <QMap>
 #include <QUrl>
 
-enum class HttpMethod { POST };
+enum class HttpMethod
+{
+    POST
+};
 
-enum class RequestFormat { X_WWW_FORM_URLENCODED, JSON, MULTIPART_FORM_DATA, PLAIN };
+enum class RequestFormat
+{
+    X_WWW_FORM_URLENCODED,
+    JSON,
+    MULTIPART_FORM_DATA,
+    PLAIN
+};
 
-class CustomUploader : public Uploader {
+class CustomUploader : public Uploader
+{
     Q_DECLARE_TR_FUNCTIONS(CustomUploader)
 
 public:

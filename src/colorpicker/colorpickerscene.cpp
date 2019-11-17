@@ -9,8 +9,9 @@
 #include <screenoverlay/screenoverlayview.hpp>
 #include <settings.hpp>
 
-ColorPickerScene::ColorPickerScene(QPixmap pixmap, QWidget *parentWidget)
-: ScreenOverlay(pixmap, parentWidget), ScreenOverlayView(this, parentWidget), image(pixmap.toImage()) {
+ColorPickerScene::ColorPickerScene(QPixmap pixmap, QWidget* parentWidget)
+: ScreenOverlay(pixmap, parentWidget), ScreenOverlayView(this, parentWidget), image(pixmap.toImage())
+{
     setWindowTitle(tr("KShare Color Picker"));
     setAttribute(Qt::WA_DeleteOnClose);
     setCursor(Qt::BlankCursor);
@@ -22,23 +23,28 @@ ColorPickerScene::ColorPickerScene(QPixmap pixmap, QWidget *parentWidget)
     ScreenOverlay::show();
 }
 
-void ColorPickerScene::keyPressEvent(QKeyEvent *event) {
+void ColorPickerScene::keyPressEvent(QKeyEvent* event)
+{
     color = image.pixelColor(cursorPos().toPoint());
-    if (event->key() == Qt::Key_Return) {
+    if (event->key() == Qt::Key_Return)
+    {
         QApplication::clipboard()->setText(color.name());
         logger::info(tr("Copied hex code to clipboard."));
     }
-    if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Escape) close();
+    if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Escape)
+        close();
 }
 
-void ColorPickerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *) {
+void ColorPickerScene::mouseReleaseEvent(QGraphicsSceneMouseEvent*)
+{
     color = image.pixelColor(cursorPos().toPoint());
     QApplication::clipboard()->setText(color.name());
     close();
     logger::info(tr("Copied hex code to clipboard."));
 }
 
-QString ColorPickerScene::generateHint() {
+QString ColorPickerScene::generateHint()
+{
     color = image.pixelColor(cursorPos().toPoint());
     return color.name();
 }

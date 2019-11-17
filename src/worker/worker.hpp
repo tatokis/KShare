@@ -9,23 +9,26 @@
 #include <QThread>
 #include <functional>
 
-struct WorkerContext {
+struct WorkerContext
+{
     QPixmap pixmap;
     QImage::Format targetFormat;
     std::function<void(QImage)> consumer;
 };
 
-struct _WorkerContext {
+struct _WorkerContext
+{
     QImage image;
     QImage::Format targetFormat;
     std::function<void(QImage)> consumer;
-    WorkerContext *underlyingThing;
+    WorkerContext* underlyingThing;
 };
 
-class Worker : public QObject {
+class Worker : public QObject
+{
     Q_OBJECT
 public:
-    static void queue(WorkerContext *context);
+    static void queue(WorkerContext* context);
     static void init();
 
 private:
@@ -33,15 +36,15 @@ private:
     ~Worker();
     static QMutex lock;
     QMutex endLock;
-    QThread *thr;
-    QQueue<_WorkerContext *> qqueue; // Say that ten times as fast
+    QThread* thr;
+    QQueue<_WorkerContext*> qqueue; // Say that ten times as fast
     bool _ended;
     void _end();
 
-    void _queue(WorkerContext *context);
+    void _queue(WorkerContext* context);
     bool ended();
 
-    static Worker *inst;
+    static Worker* inst;
     static QMutex workerLock;
 signals:
     void error(QString err);

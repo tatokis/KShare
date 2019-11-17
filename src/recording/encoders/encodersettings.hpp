@@ -7,12 +7,13 @@
     t get##F();                                                                                                        \
     void set##F(t newf);
 
-class EncoderSettings {
+class EncoderSettings
+{
 public:
     EncoderSettings();
 
     static EncoderSettings inst();
-    CodecSettings *getSettings();
+    CodecSettings* getSettings();
     SETTINGS_INTERFACE(bitrate, int)
     SETTINGS_INTERFACE(gopSize, int)
     SETTINGS_INTERFACE(h264Profile, QString)

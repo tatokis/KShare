@@ -4,8 +4,9 @@
 #include <QColorDialog>
 #include <settings.hpp>
 
-ScreenOverlaySettings::ScreenOverlaySettings(ScreenOverlay *overlay, QWidget *parent)
-: QDialog(parent), ui(new Ui::ScreenOverlaySettings), overlay(overlay) {
+ScreenOverlaySettings::ScreenOverlaySettings(ScreenOverlay* overlay, QWidget* parent)
+: QDialog(parent), ui(new Ui::ScreenOverlaySettings), overlay(overlay)
+{
     ui->setupUi(this);
 
     ui->gridBox->setChecked(overlay->grid());
@@ -15,7 +16,8 @@ ScreenOverlaySettings::ScreenOverlaySettings(ScreenOverlay *overlay, QWidget *pa
     ui->preview->setStyleSheet(QString("background-color: %1; color: %2;").arg(highlight.name()).arg(fg.name()));
 }
 
-void ScreenOverlaySettings::on_buttonBox_accepted() {
+void ScreenOverlaySettings::on_buttonBox_accepted()
+{
     settings::settings().setValue("gridEnabled", ui->gridBox->isChecked());
     settings::settings().setValue("highlightColor", highlight);
     settings::settings().setValue("foregroundColor", fg);
@@ -23,20 +25,25 @@ void ScreenOverlaySettings::on_buttonBox_accepted() {
     overlay->loadSettings();
 }
 
-void ScreenOverlaySettings::on_fgColor_pressed() {
+void ScreenOverlaySettings::on_fgColor_pressed()
+{
     QColor fog = QColorDialog::getColor("Foreground color", this, tr("Foreground color"));
-    if (!fog.isValid()) return;
+    if (!fog.isValid())
+        return;
     fg = fog;
     ui->preview->setStyleSheet(QString("background-color: %1; color: %2;").arg(highlight.name()).arg(fg.name()));
 }
 
-void ScreenOverlaySettings::on_setHighlight_pressed() {
+void ScreenOverlaySettings::on_setHighlight_pressed()
+{
     QColor hl = QColorDialog::getColor(highlight, this, tr("Highlight color"));
-    if (!hl.isValid()) return;
+    if (!hl.isValid())
+        return;
     highlight = hl;
     ui->preview->setStyleSheet(QString("background-color: %1; color: %2;").arg(highlight.name()).arg(fg.name()));
 }
 
-ScreenOverlaySettings::~ScreenOverlaySettings() {
+ScreenOverlaySettings::~ScreenOverlaySettings()
+{
     delete ui;
 }

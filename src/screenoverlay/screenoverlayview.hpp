@@ -3,14 +3,16 @@
 
 #include <QGraphicsView>
 
-class ScreenOverlayView : public QGraphicsView {
+class ScreenOverlayView : public QGraphicsView
+{
 public:
-    ScreenOverlayView(QGraphicsScene *scene, QWidget *parent = 0);
-    ~ScreenOverlayView() {
+    ScreenOverlayView(QGraphicsScene* scene, QWidget* parent = 0);
+    ~ScreenOverlayView()
+    {
     }
 
 protected:
-    void showEvent(QShowEvent *);
+    void showEvent(QShowEvent*);
 };
 
 #endif // SCREENOVERLAYVIEW_HPP

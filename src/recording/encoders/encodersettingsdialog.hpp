@@ -3,21 +3,23 @@
 
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
     class EncoderSettingsDialog;
 }
 
-class EncoderSettingsDialog : public QDialog {
+class EncoderSettingsDialog : public QDialog
+{
     Q_OBJECT
 public:
-    explicit EncoderSettingsDialog(QWidget *parent = 0);
+    explicit EncoderSettingsDialog(QWidget* parent = 0);
     ~EncoderSettingsDialog();
 
 private slots:
     void on_defaultImageQuality_clicked(bool checked);
 
 private:
-    Ui::EncoderSettingsDialog *ui;
+    Ui::EncoderSettingsDialog* ui;
 };
 
 #endif // ENCODERSETTINGSDIALOG_HPP
