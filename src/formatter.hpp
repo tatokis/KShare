@@ -2,7 +2,6 @@
 #define FORMATTER_HPP
 
 #include <QMap>
-#include <QRegExp>
 #include <QString>
 
 namespace formatter

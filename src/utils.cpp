@@ -9,6 +9,8 @@
 #include <logger.hpp>
 #include <platformbackend.hpp>
 #include <settings.hpp>
+#include <QDateTime>
+#include <QCryptographicHash>
 
 QColor utils::invertColor(QColor color)
 {
@@ -134,11 +136,10 @@ QPixmap utils::renderText(QString toRender, int padding, QColor background, QCol
 
 QString utils::randomString(int length)
 {
-    QString str;
-    str.resize(length);
-    for (int s = 0; s < length; s++)
-        str[s] = QChar('A' + char(rand() % ('Z' - 'A')));
-    return str;
+    if(length > 40)
+        length = 40;
+    QByteArray ba = QByteArray::number(QDateTime::currentSecsSinceEpoch() - rand());
+    return QCryptographicHash::hash(ba, QCryptographicHash::Sha1).toHex().left(length);
 }
 
 void utils::externalScreenshot(std::function<void(QPixmap)> callback)
