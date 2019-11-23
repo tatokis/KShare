@@ -12,7 +12,7 @@ std::tuple<QPoint, QPixmap> PlatformBackend::getCursor()
 {
     xcb_connection_t* connection = QX11Info::connection();
     xcb_xfixes_get_cursor_image_cookie_t cursorCookie = xcb_xfixes_get_cursor_image_unchecked(connection);
-    QScopedPointer<xcb_xfixes_get_cursor_image_reply_t> cursorReply(xcb_xfixes_get_cursor_image_reply(connection, cursorCookie, NULL));
+    QScopedPointer<xcb_xfixes_get_cursor_image_reply_t, QScopedPointerPodDeleter> cursorReply(xcb_xfixes_get_cursor_image_reply(connection, cursorCookie, NULL));
     if (cursorReply.isNull())
     {
         return std::tuple<QPoint, QPixmap>(QPoint(0, 0), QPixmap());
