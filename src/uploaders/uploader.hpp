@@ -17,6 +17,7 @@ public:
     {
         return true;
     }
+    virtual ~Uploader() = default;
 };
 
 #endif // UPLOADER_HPP

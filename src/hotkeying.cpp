@@ -58,3 +58,13 @@ QString hotkeying::sequence(QString seqName)
            hotkeys.value(seqName)->isRegistered() ? hotkeys.value(seqName)->shortcut().toString() : "" :
            "";
 }
+
+void hotkeying::cleanup()
+{
+    QMapIterator<QString, QHotkey*> i(hotkeys);
+    while (i.hasNext())
+    {
+        i.next();
+        delete i.value();
+    }
+}

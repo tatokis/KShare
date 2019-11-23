@@ -146,6 +146,16 @@ bool UploaderSingleton::validate()
     return uploaders.value(uploader)->validate();
 }
 
+UploaderSingleton::~UploaderSingleton()
+{
+    QMapIterator<QString, Uploader*> i(uploaders);
+    while (i.hasNext())
+    {
+        i.next();
+        delete i.value();
+    }
+}
+
 QList<Uploader*> UploaderSingleton::uploaderList()
 {
     return uploaders.values();

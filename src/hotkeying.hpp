@@ -11,6 +11,7 @@ namespace hotkeying
     bool valid(QString seq);
     void load(QString seqName, std::function<void()> func, QString def = QString());
     QString sequence(QString seqName);
+    void cleanup();
 } // namespace hotkeying
 
 #endif // HOTKEYING_HPP

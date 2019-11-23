@@ -38,6 +38,8 @@ private:
     QString uploader = "imgur";
     QList<std::runtime_error> errs;
     UploaderSingleton();
+    ~UploaderSingleton();
+
 };
 
 #endif // UPLOADERSINGLETON_HPP

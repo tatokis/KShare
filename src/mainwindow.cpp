@@ -59,7 +59,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
     tray = new QSystemTrayIcon(windowIcon(), this);
     tray->setToolTip(QApplication::applicationName());
     tray->setVisible(true);
-    QMenu* menu = new QMenu(this);
+    menu = new QMenu(this);
     QAction* shwnd = ACTION(tr("Show Window"), menu);
     QAction* fullscreen = ACTION(tr("Desktop"), menu);
     QAction* area = ACTION(tr("Selection"), menu);
@@ -120,6 +120,9 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 MainWindow::~MainWindow()
 {
+    hotkeying::cleanup();
+    delete tray;
+    menu->deleteLater();
     delete ui;
 }
 

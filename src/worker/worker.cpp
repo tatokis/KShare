@@ -33,6 +33,7 @@ void Worker::init()
 
 Worker::Worker() : QObject()
 {
+    _ended = false;
     thr = new QThread;
     moveToThread(thr);
     connect(thr, &QThread::started, this, &Worker::process);
@@ -56,6 +57,7 @@ void Worker::_end()
 {
     QMutexLocker ml(&endLock);
     _ended = true;
+    this->deleteLater();
 }
 
 bool Worker::ended()

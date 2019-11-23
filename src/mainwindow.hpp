@@ -48,6 +48,7 @@ public slots:
 private:
     bool val = false;
     static MainWindow* instance;
+    QMenu* menu;
 
 protected:
     void closeEvent(QCloseEvent* event) override;
