@@ -132,16 +132,13 @@ bool Encoder::addFrame(QImage frm)
     if (frm.format() != QImage::Format_RGB888)
         frm = frm.convertToFormat(QImage::Format_RGB888);
     setFrameRGB(frm);
-    AVPacket pkt;
-    pkt.size = 0;
-    pkt.data = NULL;
-    av_init_packet(&pkt);
+    AVPacket* pkt = av_packet_alloc();
     int ret = avcodec_send_frame(out->enc, out->frame);
     if (ret == AVERROR(EAGAIN))
     {
         do
         {
-            ret = avcodec_receive_packet(out->enc, &pkt);
+            ret = avcodec_receive_packet(out->enc, pkt);
             if (ret < 0)
             {
                 if (ret != AVERROR(EAGAIN))
@@ -149,19 +146,20 @@ bool Encoder::addFrame(QImage frm)
                 else
                     break;
             }
-            av_packet_rescale_ts(&pkt, out->enc->time_base, out->st->time_base);
-            pkt.stream_index = out->st->index;
-            ret = av_interleaved_write_frame(fc, &pkt);
+            av_packet_rescale_ts(pkt, out->enc->time_base, out->st->time_base);
+            pkt->stream_index = out->st->index;
+            ret = av_interleaved_write_frame(fc, pkt);
         } while (ret >= 0);
         if (ret < 0 && ret != AVERROR(EAGAIN))
         {
-            av_packet_unref(&pkt);
+            av_packet_unref(pkt);
             throwAVErr(ret, "send frame");
         }
     }
-    av_packet_unref(&pkt);
+    av_packet_unref(pkt);
     if (ret < 0 && ret != AVERROR(EAGAIN))
         throwAVErr(ret, "send frame");
+    av_packet_free(&pkt);
     return true;
 }
 
@@ -175,27 +173,25 @@ bool Encoder::end()
     if (ended)
         return false;
     ended = true;
+    AVPacket* pkt = av_packet_alloc();
     if (!success)
     {
         goto cleanup;
     }
     avcodec_send_frame(out->enc, NULL);
     int ret;
-    AVPacket pkt;
-    pkt.size = 0;
-    pkt.data = NULL;
-    av_init_packet(&pkt);
     do
     {
-        ret = avcodec_receive_packet(out->enc, &pkt);
+        ret = avcodec_receive_packet(out->enc, pkt);
         if (ret < 0)
             break;
-        av_packet_rescale_ts(&pkt, out->enc->time_base, out->st->time_base);
-        pkt.stream_index = out->st->index;
-        av_interleaved_write_frame(fc, &pkt);
+        av_packet_rescale_ts(pkt, out->enc->time_base, out->st->time_base);
+        pkt->stream_index = out->st->index;
+        av_interleaved_write_frame(fc, pkt);
     } while (ret >= 0);
     av_write_trailer(fc);
 cleanup:
+    av_packet_free(&pkt);
     avcodec_free_context(&out->enc);
     av_frame_free(&out->frame);
     sws_freeContext(out->sws);
